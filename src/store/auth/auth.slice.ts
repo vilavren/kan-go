@@ -1,23 +1,36 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from '../../utils/axios'
-import { IAuthState, Status } from './auth.types'
+import {
+  IIsAuth,
+  ILogin,
+  ILoginResponse,
+  IRegister,
+  IRegisterResponse,
+  Status,
+} from './auth.types'
 
-const initialState: IAuthState = {
+const initialState: IIsAuth = {
   data: null,
   status: Status.LOADING,
 }
 
-export const login = createAsyncThunk('auth/login', async (params) => {
-  const { data } = await axios.post('/auth/login', params)
-  return data
-})
+export const fetchLogin = createAsyncThunk(
+  'auth/login',
+  async (params: ILogin) => {
+    const { data } = await axios.post('/auth/login', params)
+    return data
+  }
+)
 
-export const register = createAsyncThunk('auth/register', async (params) => {
-  const { data } = await axios.post('/auth/register', params)
-  return data
-})
+export const fetchRegister = createAsyncThunk(
+  'auth/register',
+  async (params: IRegister) => {
+    const { data } = await axios.post('/auth/register', params)
+    return data
+  }
+)
 
-export const getMe = createAsyncThunk('auth/getMe', async () => {
+export const fetchIsAuth = createAsyncThunk('auth/getMe', async () => {
   const { data } = await axios.get('/auth/me')
   return data
 })
@@ -31,41 +44,41 @@ const authState = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(login.pending, (state) => {
+    builder.addCase(fetchLogin.pending, (state) => {
       state.status = Status.LOADING
       state.data = null
     })
-    builder.addCase(login.fulfilled, (state, action) => {
+    builder.addCase(fetchLogin.fulfilled, (state, action) => {
       state.status = Status.SUCCESS
       state.data = action.payload
     })
-    builder.addCase(login.rejected, (state) => {
+    builder.addCase(fetchLogin.rejected, (state) => {
       state.status = Status.ERROR
       state.data = null
     })
 
-    builder.addCase(register.pending, (state) => {
+    builder.addCase(fetchRegister.pending, (state) => {
       state.status = Status.LOADING
       state.data = null
     })
-    builder.addCase(register.fulfilled, (state, action) => {
+    builder.addCase(fetchRegister.fulfilled, (state, action) => {
       state.status = Status.SUCCESS
       state.data = action.payload
     })
-    builder.addCase(register.rejected, (state) => {
+    builder.addCase(fetchRegister.rejected, (state) => {
       state.status = Status.ERROR
       state.data = null
     })
 
-    builder.addCase(getMe.pending, (state) => {
+    builder.addCase(fetchIsAuth.pending, (state) => {
       state.status = Status.LOADING
       state.data = null
     })
-    builder.addCase(getMe.fulfilled, (state, action) => {
+    builder.addCase(fetchIsAuth.fulfilled, (state, action) => {
       state.status = Status.SUCCESS
       state.data = action.payload
     })
-    builder.addCase(getMe.rejected, (state) => {
+    builder.addCase(fetchIsAuth.rejected, (state) => {
       state.status = Status.ERROR
       state.data = null
     })

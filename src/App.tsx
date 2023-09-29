@@ -8,7 +8,6 @@ import { AppLayout } from './components/layout/AppLayout'
 import { Home } from './pages/Home'
 import { Board } from './pages/Board'
 import { AuthLayout } from './components/layout/AuthLayout'
-import { RequireAuth } from './helpers/RequireAuth'
 function App() {
   const theme = createTheme({
     palette: { mode: 'dark' },
@@ -25,11 +24,7 @@ function App() {
     },
     {
       path: '/',
-      element: (
-        <RequireAuth>
-          <AppLayout />
-        </RequireAuth>
-      ),
+      element: <AppLayout />,
       children: [
         { path: '/', element: <Home />, index: true },
         { path: 'boards', element: <Home /> },
