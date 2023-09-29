@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from '@mui/material'
 
-export const Loading = ({ ...props }) => {
+export const Loading = ({ fullHeight }: { fullHeight: boolean }) => {
   return (
     <Box
       sx={{
@@ -8,7 +8,7 @@ export const Loading = ({ ...props }) => {
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
-        height: props.fullHeight ? '100vh' : '100%',
+        height: fullHeight ? '100vh' : '100%',
       }}
     >
       <CircularProgress />
