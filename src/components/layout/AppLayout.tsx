@@ -1,11 +1,12 @@
+import { Box } from '@mui/material'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, Outlet } from 'react-router-dom'
+
 import { fetchIsAuth } from '../../store/auth/auth.slice'
 import { Status } from '../../store/auth/auth.types'
 import { AppDispatch, RootState } from '../../store/store'
 import { Loading } from '../common/Loading'
-import { Box } from '@mui/material'
 import { Sidebar } from '../common/Sidebar'
 
 export const AppLayout = () => {

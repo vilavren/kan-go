@@ -1,10 +1,11 @@
-import { Link, Navigate } from 'react-router-dom'
-import { Box, Button, TextField } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
-import { fetchLogin } from '../store/auth/auth.slice'
-import { ILogin } from '../store/auth/auth.types'
+import { Box, Button, TextField } from '@mui/material'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link, Navigate } from 'react-router-dom'
+
+import { fetchLogin } from '../store/auth/auth.slice'
+import { ILogin } from '../store/auth/auth.types'
 import { AppDispatch, RootState } from '../store/store'
 
 export const Login = () => {
@@ -14,7 +15,7 @@ export const Login = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<ILogin>({
     defaultValues: {
       email: '',
@@ -25,9 +26,8 @@ export const Login = () => {
 
   const onSubmit: SubmitHandler<ILogin> = async (values) => {
     const data = await dispatch(fetchLogin(values))
-    console.log(data)
     if (!data.payload) {
-      return alert('Не удалось зарегистрироваться!')
+      return alert('Не удалось авторизоваться!')
     }
 
     if ('token' in data.payload) {
@@ -72,6 +72,7 @@ export const Login = () => {
           color="success"
           type="submit"
           disabled={!isValid}
+          loading={isSubmitting}
         >
           Войти
         </LoadingButton>

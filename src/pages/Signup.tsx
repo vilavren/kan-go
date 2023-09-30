@@ -1,12 +1,13 @@
-import { Link, Navigate } from 'react-router-dom'
-import { Box, Button, TextField } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
-import { useDispatch } from 'react-redux'
+import { Box, Button, TextField } from '@mui/material'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { AppDispatch, RootState } from '../store/store'
-import { fetchRegister } from '../store/auth/auth.slice'
+import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
+import { Link, Navigate } from 'react-router-dom'
+
+import { fetchRegister } from '../store/auth/auth.slice'
 import { IRegister } from '../store/auth/auth.types'
+import { AppDispatch, RootState } from '../store/store'
 
 export const Signup = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -15,7 +16,7 @@ export const Signup = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<IRegister>({
     defaultValues: {
       name: '',
@@ -27,7 +28,6 @@ export const Signup = () => {
 
   const onSubmit: SubmitHandler<IRegister> = async (values) => {
     const data = await dispatch(fetchRegister(values))
-
     if (!data.payload) {
       return alert('Не удалось зарегистрироваться!')
     }
@@ -84,6 +84,7 @@ export const Signup = () => {
           color="success"
           type="submit"
           disabled={!isValid}
+          loading={isSubmitting}
         >
           Зарегистрироваться
         </LoadingButton>

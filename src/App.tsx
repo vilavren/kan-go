@@ -2,12 +2,14 @@ import './App.css'
 import { CssBaseline } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+
+import { AppLayout } from './components/layout/AppLayout'
+import { AuthLayout } from './components/layout/AuthLayout'
+import { Board } from './pages/Board'
+import { Home } from './pages/Home'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
-import { AppLayout } from './components/layout/AppLayout'
-import { Home } from './pages/Home'
-import { Board } from './pages/Board'
-import { AuthLayout } from './components/layout/AuthLayout'
+
 function App() {
   const theme = createTheme({
     palette: { mode: 'dark' },

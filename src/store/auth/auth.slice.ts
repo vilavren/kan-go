@@ -1,13 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
 import axios from '../../utils/axios'
-import {
-  IIsAuth,
-  ILogin,
-  ILoginResponse,
-  IRegister,
-  IRegisterResponse,
-  Status,
-} from './auth.types'
+
+import { IIsAuth, ILogin, IRegister, Status } from './auth.types'
 
 const initialState: IIsAuth = {
   data: null,
