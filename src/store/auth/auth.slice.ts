@@ -1,19 +1,40 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { AxiosError } from 'axios'
 
 import axios from '../../utils/axios'
+import { loadState } from '../storage'
 
-import { IIsAuth, ILogin, IRegister, Status } from './auth.types'
+import {
+  IAuthState,
+  ILogin,
+  ILoginResponse,
+  IRegister,
+  Status,
+} from './auth.types'
 
-const initialState: IIsAuth = {
-  data: null,
+export interface IAuthPersistentState {
+  jwt: string | undefined
+}
+
+const initialState: IAuthState = {
+  jwt: loadState<IAuthPersistentState>('token')?.jwt ?? undefined,
   status: Status.LOADING,
 }
 
 export const fetchLogin = createAsyncThunk(
   'auth/login',
   async (params: ILogin) => {
-    const { data } = await axios.post('/auth/login', params)
-    return data
+    try {
+      const { data } = await axios.post<ILoginResponse>('/auth/login', {
+        email: params.email,
+        password: params.password,
+      })
+      return data
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data.message)
+      }
+    }
   }
 )
 
@@ -35,26 +56,29 @@ const authState = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      state.data = null
+      state.data = undefined
+    },
+    clearLoginError: (state) => {
+      state.loginErrorMessage = undefined
     },
   },
   extraReducers(builder) {
     builder.addCase(fetchLogin.pending, (state) => {
       state.status = Status.LOADING
-      state.data = null
+      state.data = undefined
     })
     builder.addCase(fetchLogin.fulfilled, (state, action) => {
       state.status = Status.SUCCESS
-      state.data = action.payload
+      state.jwt = action.payload?.token
     })
-    builder.addCase(fetchLogin.rejected, (state) => {
+    builder.addCase(fetchLogin.rejected, (state, action) => {
       state.status = Status.ERROR
-      state.data = null
+      state.loginErrorMessage = action.error.message
     })
 
     builder.addCase(fetchRegister.pending, (state) => {
       state.status = Status.LOADING
-      state.data = null
+      state.data = undefined
     })
     builder.addCase(fetchRegister.fulfilled, (state, action) => {
       state.status = Status.SUCCESS
@@ -62,12 +86,12 @@ const authState = createSlice({
     })
     builder.addCase(fetchRegister.rejected, (state) => {
       state.status = Status.ERROR
-      state.data = null
+      state.data = undefined
     })
 
     builder.addCase(fetchIsAuth.pending, (state) => {
       state.status = Status.LOADING
-      state.data = null
+      state.data = undefined
     })
     builder.addCase(fetchIsAuth.fulfilled, (state, action) => {
       state.status = Status.SUCCESS
@@ -75,10 +99,10 @@ const authState = createSlice({
     })
     builder.addCase(fetchIsAuth.rejected, (state) => {
       state.status = Status.ERROR
-      state.data = null
+      state.data = undefined
     })
   },
 })
 
-export const { logout } = authState.actions
+export const { logout, clearLoginError } = authState.actions
 export const authReducer = authState.reducer

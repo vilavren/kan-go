@@ -37,14 +37,10 @@ export interface IRegisterResponse {
   token: string
 }
 
-export interface IIsAuth {
-  data: {
-    _id: string
-    name: string
-    email: string
-    createdAt: string
-    updatedAt: string
-    __v: number
-  } | null
+export interface IAuthState {
+  jwt: string | undefined
+  data?: ILoginResponse | undefined
   status: Status
+  loginErrorMessage?: string
+  registerErrorMessage?: string
 }

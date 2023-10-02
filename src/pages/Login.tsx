@@ -1,16 +1,26 @@
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Box, Button, TextField } from '@mui/material'
+import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-import { fetchLogin } from '../store/auth/auth.slice'
+import { clearLoginError, fetchLogin } from '../store/auth/auth.slice'
 import { ILogin } from '../store/auth/auth.types'
 import { AppDispatch, RootState } from '../store/store'
 
 export const Login = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
-  const isAuth = useSelector((s: RootState) => Boolean(s.auth.data))
+  const { jwt, loginErrorMessage } = useSelector(
+    (state: RootState) => state.auth
+  )
+
+  useEffect(() => {
+    if (jwt) {
+      navigate('/')
+    }
+  }, [jwt, navigate])
 
   const {
     register,
@@ -25,20 +35,15 @@ export const Login = () => {
   })
 
   const onSubmit: SubmitHandler<ILogin> = async (values) => {
-    const data = await dispatch(fetchLogin(values))
-    if (!data.payload) {
-      return alert('Не удалось авторизоваться!')
-    }
-
-    if ('token' in data.payload) {
-      window.localStorage.setItem('token', data.payload.token)
-    }
+    dispatch(clearLoginError())
+    await dispatch(fetchLogin(values))
   }
 
-  if (isAuth) {
-    return <Navigate to="/" />
-  }
+  setTimeout(() => {
+    dispatch(clearLoginError())
+  }, 2000)
 
+  console.log('render')
   return (
     <>
       <Box component="form" sx={{ mt: 1 }} onSubmit={handleSubmit(onSubmit)}>
@@ -48,9 +53,11 @@ export const Login = () => {
           fullWidth
           id="name"
           label="Email"
-          error={Boolean(errors.email?.message)}
-          helperText={errors.email?.message}
-          {...register('email', { required: 'Укажите email' })}
+          error={Boolean(loginErrorMessage) || Boolean(errors.email)}
+          helperText={errors.email?.message || loginErrorMessage}
+          {...register('email', {
+            required: 'Укажите email',
+          })}
         />
         <TextField
           margin="normal"
@@ -58,8 +65,12 @@ export const Login = () => {
           fullWidth
           id="password"
           label="Пароль"
-          error={Boolean(errors.password?.message)}
-          helperText={errors.password?.message}
+          error={
+            Boolean(loginErrorMessage) || Boolean(errors.password?.message)
+          }
+          helperText={
+            loginErrorMessage ? loginErrorMessage : errors.password?.message
+          }
           {...register('password', { required: 'Укажите пароль' })}
         />
         <LoadingButton
