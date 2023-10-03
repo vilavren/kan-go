@@ -51,6 +51,7 @@ export const Login = () => {
           margin="normal"
           required
           fullWidth
+          type="email"
           id="name"
           label="Email"
           error={Boolean(loginErrorMessage) || Boolean(errors.email)}

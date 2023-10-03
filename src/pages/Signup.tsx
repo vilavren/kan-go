@@ -63,6 +63,7 @@ export const Signup = () => {
           margin="normal"
           required
           fullWidth
+          type="email"
           id="email"
           label="Email"
           error={Boolean(registerErrorMessage) || Boolean(errors.email)}
@@ -73,6 +74,7 @@ export const Signup = () => {
           margin="normal"
           required
           fullWidth
+          type="password"
           id="password"
           label="Пароль"
           error={Boolean(registerErrorMessage) || Boolean(errors.password)}
