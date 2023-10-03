@@ -21,8 +21,6 @@ export const AuthLayout = () => {
   } else if (jwt) {
     return <Navigate to="/" replace />
   }
-
-  console.log('layout')
   return (
     <div>
       <Outlet />

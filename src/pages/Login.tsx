@@ -43,7 +43,6 @@ export const Login = () => {
     dispatch(authActions.clearLoginError())
   }, 2000)
 
-  console.log('render')
   return (
     <>
       <Box component="form" sx={{ mt: 1 }} onSubmit={handleSubmit(onSubmit)}>

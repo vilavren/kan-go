@@ -1,3 +1,4 @@
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
 import {
   Box,
@@ -57,6 +58,39 @@ export const Sidebar = () => {
             </Typography>
             <IconButton onClick={logout}>
               <LogoutOutlinedIcon fontSize="small" />
+            </IconButton>
+          </Box>
+        </ListItem>
+        <Box sx={{ paddingTop: '10px' }}></Box>
+        <ListItem>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Typography variant="body2" fontWeight={700}>
+              Закрепленные
+            </Typography>
+          </Box>
+        </ListItem>
+        <Box sx={{ paddingTop: '10px' }}></Box>
+        <ListItem>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Typography variant="body2" fontWeight={700}>
+              Частные
+            </Typography>
+            <IconButton>
+              <AddBoxOutlinedIcon fontSize="small" />
             </IconButton>
           </Box>
         </ListItem>

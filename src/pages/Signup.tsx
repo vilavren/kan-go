@@ -38,8 +38,7 @@ export const Signup = () => {
 
   const onSubmit: SubmitHandler<IRegister> = async (values) => {
     dispatch(authActions.clearRegisterError())
-    const data = await dispatch(fetchRegister(values))
-    console.log(data)
+    await dispatch(fetchRegister(values))
   }
 
   setTimeout(() => {
