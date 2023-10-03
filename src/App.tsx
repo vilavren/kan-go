@@ -1,6 +1,7 @@
 import './App.css'
 import { CssBaseline } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { Helmet } from 'react-helmet-async'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { AppLayout } from './components/layout/AppLayout'
@@ -37,6 +38,10 @@ function App() {
 
   return (
     <div>
+      <Helmet>
+        <meta name="theme-color" content={theme.palette.background.default} />
+      </Helmet>
+
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <RouterProvider router={router} />
