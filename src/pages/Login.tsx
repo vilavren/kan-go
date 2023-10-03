@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { clearLoginError, fetchLogin } from '../store/auth/auth.slice'
+import { authActions, fetchLogin } from '../store/auth/auth.slice'
 import { ILogin } from '../store/auth/auth.types'
 import { AppDispatch, RootState } from '../store/store'
 
@@ -35,12 +35,12 @@ export const Login = () => {
   })
 
   const onSubmit: SubmitHandler<ILogin> = async (values) => {
-    dispatch(clearLoginError())
+    dispatch(authActions.clearLoginError())
     await dispatch(fetchLogin(values))
   }
 
   setTimeout(() => {
-    dispatch(clearLoginError())
+    dispatch(authActions.clearLoginError())
   }, 2000)
 
   console.log('render')
@@ -63,6 +63,7 @@ export const Login = () => {
           margin="normal"
           required
           fullWidth
+          type="password"
           id="password"
           label="Пароль"
           error={

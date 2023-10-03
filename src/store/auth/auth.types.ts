@@ -17,29 +17,19 @@ export interface ILogin {
   password: string
 }
 
-export interface ILoginResponse {
+export interface IProfile {
   _id: string
   name: string
   email: string
   createdAt: string
   updatedAt: string
   __v: number
-  token: string
-}
-
-export interface IRegisterResponse {
-  name: string
-  email: string
-  _id: string
-  createdAt: string
-  updatedAt: string
-  __v: number
-  token: string
+  token?: string
 }
 
 export interface IAuthState {
   jwt: string | undefined
-  data?: ILoginResponse | undefined
+  data?: IProfile | undefined
   status: Status
   loginErrorMessage?: string
   registerErrorMessage?: string

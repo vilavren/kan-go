@@ -12,7 +12,7 @@ import { Sidebar } from '../common/Sidebar'
 export const AppLayout = () => {
   const dispatch = useDispatch<AppDispatch>()
 
-  const { data, status } = useSelector((state: RootState) => state.auth)
+  const { jwt, status } = useSelector((state: RootState) => state.auth)
 
   useEffect(() => {
     dispatch(fetchIsAuth())
@@ -20,7 +20,7 @@ export const AppLayout = () => {
 
   if (status === Status.LOADING) {
     return <Loading fullHeight />
-  } else if (!data) {
+  } else if (!jwt) {
     return <Navigate to="/login" replace />
   }
   return (
