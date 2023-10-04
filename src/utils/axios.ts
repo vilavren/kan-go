@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { IAuthPersistentState } from '../store/auth/auth.slice'
+import { IAuthPersistentState } from '../store/auth/auth.types'
 import { loadState } from '../store/storage'
 
 const instance = axios.create({

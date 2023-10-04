@@ -4,7 +4,14 @@ export enum Status {
   ERROR = 'error',
 }
 
-export interface IAuthState {}
+export interface IAuthPersistentState {
+  jwt: string | undefined
+}
+
+export interface IAuthState {
+  jwt: string | undefined
+  status: Status
+}
 
 export interface IRegister {
   name: string
