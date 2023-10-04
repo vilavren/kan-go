@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios'
 
+import { Status } from '../../interfaces/status.enum'
 import axios from '../../utils/axios'
 import { loadState } from '../storage'
 
@@ -10,7 +11,6 @@ import {
   ILogin,
   IProfile,
   IRegister,
-  Status,
 } from './auth.types'
 
 const initialState: IAuthState = {
@@ -84,7 +84,7 @@ export const fetchIsAuth = createAsyncThunk('auth/getMe', async () => {
   return response.data
 })
 
-const authState = createSlice({
+const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
@@ -142,5 +142,5 @@ const authState = createSlice({
   },
 })
 
-export const authActions = authState.actions
-export const authReducer = authState.reducer
+export const authActions = authSlice.actions
+export const authReducer = authSlice.reducer

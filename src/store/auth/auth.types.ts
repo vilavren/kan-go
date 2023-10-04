@@ -1,8 +1,4 @@
-export enum Status {
-  LOADING = 'loading',
-  SUCCESS = 'success',
-  ERROR = 'error',
-}
+import { Status } from '../../interfaces/status.enum'
 
 export interface IAuthPersistentState {
   jwt: string | undefined
