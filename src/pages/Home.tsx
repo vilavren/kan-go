@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { Status } from '../interfaces/status.enum'
-import { createBoard } from '../store/boards/boards.slice'
+import { fetchCreateBoard } from '../store/boards/boards.slice'
 import { AppDispatch, RootState } from '../store/store'
 
 export const Home = () => {
@@ -23,7 +23,7 @@ export const Home = () => {
   }, [boardId, navigate])
 
   const create = async () => {
-    await dispatch(createBoard())
+    await dispatch(fetchCreateBoard())
   }
 
   return (

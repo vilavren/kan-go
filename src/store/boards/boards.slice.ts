@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { Status } from '../../interfaces/status.enum'
 import axios from '../../utils/axios'
@@ -16,47 +16,76 @@ const initialState: IBoardsState = {
   },
 }
 
-export const getAllBoards = createAsyncThunk('board/getAllBoards', async () => {
-  const res = await axios.get<IBoard[]>('/boards')
-  return res.data
-})
+export const fetchGetAllBoards = createAsyncThunk(
+  'board/getAllBoards',
+  async () => {
+    const res = await axios.get<IBoard[]>('/boards')
+    return res.data
+  }
+)
 
-export const createBoard = createAsyncThunk('board/createBoard', async () => {
-  const res = await axios.post<IBoard>('/boards')
-  return res.data
-})
+export const fetchCreateBoard = createAsyncThunk(
+  'board/createBoard',
+  async () => {
+    const res = await axios.post<IBoard>('/boards')
+    return res.data
+  }
+)
+
+export const fetchUpdatePositionBoards = createAsyncThunk(
+  'board/updatePositionBoards',
+  async (params: IBoard[]) => {
+    const res = await axios.put<IBoard[]>('/boards', params)
+    return res.data
+  }
+)
 
 const boardsSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    setBoards: (state, action: PayloadAction<IBoard[]>) => {
+      state.boards.items = action.payload
+    },
+  },
   extraReducers(builder) {
     // getAllBoards
-    builder.addCase(createBoard.pending, (state) => {
+    builder.addCase(fetchGetAllBoards.pending, (state) => {
+      state.boards.status = Status.LOADING
+      state.boards.items = []
+    })
+    builder.addCase(fetchGetAllBoards.fulfilled, (state, action) => {
+      state.boards.status = Status.SUCCESS
+      state.boards.items = action.payload
+    })
+    builder.addCase(fetchGetAllBoards.rejected, (state) => {
+      state.boards.status = Status.ERROR
+      state.boards.items = []
+    })
+
+    // createBoard
+    builder.addCase(fetchCreateBoard.pending, (state) => {
       state.board.status = Status.LOADING
       state.board.item = undefined
     })
-    builder.addCase(createBoard.fulfilled, (state, action) => {
+    builder.addCase(fetchCreateBoard.fulfilled, (state, action) => {
       state.board.status = Status.SUCCESS
       state.board.item = action.payload
     })
-    builder.addCase(createBoard.rejected, (state) => {
+    builder.addCase(fetchCreateBoard.rejected, (state) => {
       state.board.status = Status.ERROR
       // state.board.item = undefined
     })
 
-    // getAllBoards
-    builder.addCase(getAllBoards.pending, (state) => {
+    // updatePositionBoards
+    builder.addCase(fetchUpdatePositionBoards.pending, (state) => {
       state.boards.status = Status.LOADING
-      state.boards.items = []
     })
-    builder.addCase(getAllBoards.fulfilled, (state, action) => {
+    builder.addCase(fetchUpdatePositionBoards.fulfilled, (state) => {
       state.boards.status = Status.SUCCESS
-      state.boards.items = action.payload
     })
-    builder.addCase(getAllBoards.rejected, (state) => {
+    builder.addCase(fetchUpdatePositionBoards.rejected, (state) => {
       state.boards.status = Status.ERROR
-      state.boards.items = []
     })
   },
 })
