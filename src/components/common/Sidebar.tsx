@@ -17,7 +17,7 @@ import {
   Droppable,
 } from 'react-beautiful-dnd'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { authActions } from '../../store/auth/auth.slice'
 import {
@@ -32,33 +32,24 @@ export const Sidebar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const user = useSelector((s: RootState) => s.auth.data)
-  const board = useSelector((s: RootState) => s.boards.board.item)
   const boards = useSelector((s: RootState) => s.boards.boards.items)
-  const [activeIndex, setActiveIndex] = useState(0)
-
-  // const isBoardsLoading = boards.status !== Status.LOADING
-  const boardId = board?.id
+  const [activeIndex, setActiveIndex] = useState<number>(0)
+  const { boardsId } = useParams()
 
   const sidebarWidth = 250
 
   useEffect(() => {
     dispatch(fetchGetAllBoards())
-  }, [dispatch])
+  }, [])
 
   useEffect(() => {
-    const activeItem = boards.findIndex((e) => e.id === boardId)
-    if (boards.length > 0 && boardId === undefined) {
+    const activeItem = boards.findIndex((e) => e.id === boardsId)
+    if (boards.length > 0 && boardsId === undefined) {
       navigate(`/boards/${boards[0].id}`)
     }
     setActiveIndex(activeItem)
-  }, [boards, boardId, navigate])
-
-  useEffect(() => {
-    if (boardId) {
-      navigate(`/boards/${boardId}`)
-      console.log('boardId после:', boardId)
-    }
-  }, [boardId, navigate])
+    dispatch(boardActions.setActiveBoard(boards[activeItem]))
+  }, [boards, boardsId, navigate])
 
   const logout = () => {
     dispatch(authActions.logout())
@@ -73,19 +64,17 @@ export const Sidebar = () => {
     const [removed] = newList.splice(source.index, 1)
     newList.splice(destination.index, 0, removed)
 
-    const activeItem = newList.findIndex((e) => e.id === boardId)
-    setActiveIndex(activeItem)
+    const activeItem = newList.findIndex((e) => e.id === boardsId)
+    dispatch(boardActions.setActiveBoard(newList[activeItem]))
     dispatch(boardActions.setBoards(newList))
     dispatch(fetchUpdatePositionBoards(newList))
+    setActiveIndex(activeItem)
   }
 
   const addBoard = async () => {
-    console.log('boardId до:', boardId)
-
     await dispatch(fetchCreateBoard())
   }
 
-  console.log(boards)
   return (
     <Drawer
       container={window.document.body}
@@ -189,7 +178,7 @@ export const Sidebar = () => {
                             textOverflow: 'ellipsis',
                           }}
                         >
-                          {i.icon} {i.title}
+                          {i.icon} {i.id}
                         </Typography>
                       </ListItemButton>
                     )}

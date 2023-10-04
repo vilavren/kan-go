@@ -1,3 +1,9 @@
+import { useSelector } from 'react-redux'
+
+import { RootState } from '../store/store'
+
 export const Board = () => {
-  return <div>Board</div>
+  const board = useSelector((s: RootState) => s.boards.board.item)
+
+  return <div>{board?.id}</div>
 }

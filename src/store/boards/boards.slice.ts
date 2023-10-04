@@ -17,7 +17,7 @@ const initialState: IBoardsState = {
 }
 
 export const fetchGetAllBoards = createAsyncThunk(
-  'board/getAllBoards',
+  'boards/getAllBoards',
   async () => {
     const res = await axios.get<IBoard[]>('/boards')
     return res.data
@@ -25,7 +25,7 @@ export const fetchGetAllBoards = createAsyncThunk(
 )
 
 export const fetchCreateBoard = createAsyncThunk(
-  'board/createBoard',
+  'boards/createBoard',
   async () => {
     const res = await axios.post<IBoard>('/boards')
     return res.data
@@ -33,7 +33,7 @@ export const fetchCreateBoard = createAsyncThunk(
 )
 
 export const fetchUpdatePositionBoards = createAsyncThunk(
-  'board/updatePositionBoards',
+  'boards/updatePositionBoards',
   async (params: IBoard[]) => {
     const res = await axios.put<IBoard[]>('/boards', params)
     return res.data
@@ -41,9 +41,12 @@ export const fetchUpdatePositionBoards = createAsyncThunk(
 )
 
 const boardsSlice = createSlice({
-  name: 'auth',
+  name: 'boards',
   initialState,
   reducers: {
+    setActiveBoard: (state, action: PayloadAction<IBoard>) => {
+      state.board.item = action.payload
+    },
     setBoards: (state, action: PayloadAction<IBoard[]>) => {
       state.boards.items = action.payload
     },
@@ -71,10 +74,10 @@ const boardsSlice = createSlice({
     builder.addCase(fetchCreateBoard.fulfilled, (state, action) => {
       state.board.status = Status.SUCCESS
       state.board.item = action.payload
+      state.boards.items = [action.payload, ...state.boards.items]
     })
     builder.addCase(fetchCreateBoard.rejected, (state) => {
       state.board.status = Status.ERROR
-      // state.board.item = undefined
     })
 
     // updatePositionBoards
