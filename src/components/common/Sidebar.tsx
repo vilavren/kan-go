@@ -32,12 +32,12 @@ export const Sidebar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const user = useSelector((s: RootState) => s.auth.data)
-  const { board } = useSelector((s: RootState) => s.boards)
+  const board = useSelector((s: RootState) => s.boards.board.item)
   const boards = useSelector((s: RootState) => s.boards.boards.items)
   const [activeIndex, setActiveIndex] = useState(0)
 
   // const isBoardsLoading = boards.status !== Status.LOADING
-  const boardId = board.item?.id
+  const boardId = board?.id
 
   const sidebarWidth = 250
 
@@ -52,6 +52,13 @@ export const Sidebar = () => {
     }
     setActiveIndex(activeItem)
   }, [boards, boardId, navigate])
+
+  useEffect(() => {
+    if (boardId) {
+      navigate(`/boards/${boardId}`)
+      console.log('boardId после:', boardId)
+    }
+  }, [boardId, navigate])
 
   const logout = () => {
     dispatch(authActions.logout())
@@ -72,8 +79,10 @@ export const Sidebar = () => {
     dispatch(fetchUpdatePositionBoards(newList))
   }
 
-  const create = async () => {
-    // await dispatch(fetchCreateBoard())
+  const addBoard = async () => {
+    console.log('boardId до:', boardId)
+
+    await dispatch(fetchCreateBoard())
   }
 
   console.log(boards)
@@ -141,7 +150,7 @@ export const Sidebar = () => {
             <Typography variant="body2" fontWeight={700}>
               Частные
             </Typography>
-            <IconButton onClick={create}>
+            <IconButton onClick={addBoard}>
               <AddBoxOutlinedIcon fontSize="small" />
             </IconButton>
           </Box>
