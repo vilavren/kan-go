@@ -3,7 +3,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { Status } from '../../interfaces/status.enum'
 import axios from '../../utils/axios'
 
-import { IBoard, IBoardsState } from './boards.types'
+import { IBoard, IBoardUpdate, IBoardsState } from './boards.types'
 
 const initialState: IBoardsState = {
   board: {
@@ -40,11 +40,19 @@ export const fetchUpdatePositionBoards = createAsyncThunk(
   }
 )
 
-export const fetchGetOneBoard = createAsyncThunk<IBoard, string | undefined>(
+export const fetchGetOneBoard = createAsyncThunk(
   'boards/fetchGetOneBoard',
-  async (id: string | undefined) => {
-    const { data } = await axios.get<IBoard>(`/boards/${id}`)
-    return data
+  async (id: string) => {
+    const res = await axios.get(`/boards/${id}`)
+    return res.data
+  }
+)
+
+export const fetchUpdateBoard = createAsyncThunk(
+  'boards/updateBoard',
+  async ({ id, params }: { id: string; params: IBoardUpdate[] }) => {
+    const res = await axios.put<IBoard>(`/boards/${id}`, params)
+    return res.data
   }
 )
 
@@ -108,6 +116,19 @@ const boardsSlice = createSlice({
       state.board.item = action.payload
     })
     builder.addCase(fetchGetOneBoard.rejected, (state) => {
+      state.board.status = Status.ERROR
+      state.board.item = undefined
+    })
+
+    // fetchUpdateBoard
+    builder.addCase(fetchUpdateBoard.pending, (state) => {
+      state.board.status = Status.LOADING
+    })
+    builder.addCase(fetchUpdateBoard.fulfilled, (state, action) => {
+      state.board.status = Status.SUCCESS
+      state.board.item = action.payload
+    })
+    builder.addCase(fetchUpdateBoard.rejected, (state) => {
       state.board.status = Status.ERROR
       state.board.item = undefined
     })

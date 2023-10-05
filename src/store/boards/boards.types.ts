@@ -21,6 +21,14 @@ export interface IBoard {
   favourite: boolean
   favouritePosition: number
   __v: number
-  sections?: [] | undefined
+  sections: []
   id: string
+}
+
+export interface IBoardUpdate {
+  icon?: string
+  title?: string
+  description?: string
+  sections?: []
+  favourite?: boolean
 }

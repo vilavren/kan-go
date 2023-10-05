@@ -34,7 +34,7 @@ export const Sidebar = () => {
   const { data } = useSelector((s: RootState) => s.auth)
   const { boards } = useSelector((s: RootState) => s.boards)
   const [activeIndex, setActiveIndex] = useState<number>(0)
-  const { boardsId } = useParams()
+  const { boardsId } = useParams<string>()
 
   const sidebarWidth = 250
 
