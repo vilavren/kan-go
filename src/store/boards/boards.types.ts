@@ -12,6 +12,7 @@ export interface IBoardsState {
 }
 
 export interface IBoard {
+  _id: string
   user: string
   icon: string
   title: string
@@ -19,7 +20,7 @@ export interface IBoard {
   position: number
   favourite: boolean
   favouritePosition: number
-  _id: string
   __v: number
+  sections?: [] | undefined
   id: string
 }

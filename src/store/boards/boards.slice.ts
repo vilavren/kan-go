@@ -40,6 +40,14 @@ export const fetchUpdatePositionBoards = createAsyncThunk(
   }
 )
 
+export const fetchGetOneBoard = createAsyncThunk<IBoard, string | undefined>(
+  'boards/fetchGetOneBoard',
+  async (id: string | undefined) => {
+    const { data } = await axios.get<IBoard>(`/boards/${id}`)
+    return data
+  }
+)
+
 const boardsSlice = createSlice({
   name: 'boards',
   initialState,
@@ -89,6 +97,19 @@ const boardsSlice = createSlice({
     })
     builder.addCase(fetchUpdatePositionBoards.rejected, (state) => {
       state.boards.status = Status.ERROR
+    })
+
+    // fetchGetOneBoard
+    builder.addCase(fetchGetOneBoard.pending, (state) => {
+      state.board.status = Status.LOADING
+    })
+    builder.addCase(fetchGetOneBoard.fulfilled, (state, action) => {
+      state.board.status = Status.SUCCESS
+      state.board.item = action.payload
+    })
+    builder.addCase(fetchGetOneBoard.rejected, (state) => {
+      state.board.status = Status.ERROR
+      state.board.item = undefined
     })
   },
 })

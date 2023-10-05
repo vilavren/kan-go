@@ -31,8 +31,8 @@ import { AppDispatch, RootState } from '../../store/store'
 export const Sidebar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
-  const user = useSelector((s: RootState) => s.auth.data)
-  const boards = useSelector((s: RootState) => s.boards.boards.items)
+  const { data } = useSelector((s: RootState) => s.auth)
+  const { boards } = useSelector((s: RootState) => s.boards)
   const [activeIndex, setActiveIndex] = useState<number>(0)
   const { boardsId } = useParams()
 
@@ -43,12 +43,12 @@ export const Sidebar = () => {
   }, [])
 
   useEffect(() => {
-    const activeItem = boards.findIndex((e) => e.id === boardsId)
-    if (boards.length > 0 && boardsId === undefined) {
-      navigate(`/boards/${boards[0].id}`)
+    const activeItem = boards.items.findIndex((e) => e.id === boardsId)
+    if (boards.items.length > 0 && boardsId === undefined) {
+      navigate(`/boards/${boards.items[0].id}`)
     }
     setActiveIndex(activeItem)
-    dispatch(boardActions.setActiveBoard(boards[activeItem]))
+    dispatch(boardActions.setActiveBoard(boards.items[activeItem]))
   }, [boards, boardsId, navigate])
 
   const logout = () => {
@@ -60,7 +60,7 @@ export const Sidebar = () => {
     if (!destination) {
       return
     }
-    const newList = [...boards]
+    const newList = [...boards.items]
     const [removed] = newList.splice(source.index, 1)
     newList.splice(destination.index, 0, removed)
 
@@ -104,7 +104,7 @@ export const Sidebar = () => {
             }}
           >
             <Typography variant="body2" fontWeight={700}>
-              {user?.name}
+              {data?.name}
             </Typography>
             <IconButton onClick={logout}>
               <LogoutOutlinedIcon fontSize="small" />
@@ -152,7 +152,7 @@ export const Sidebar = () => {
           >
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
-                {boards.map((i, index) => (
+                {boards.items.map((i, index) => (
                   <Draggable key={i.id} draggableId={i.id} index={index}>
                     {(provided, snapshot) => (
                       <ListItemButton
