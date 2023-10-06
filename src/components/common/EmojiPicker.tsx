@@ -21,11 +21,7 @@ export const EmojiPicker = ({
   }, [icon])
 
   const selectEmoji = (e: BaseEmoji) => {
-    const sym = e.unified.split('-')
-    const codesArray: number[] = sym.map((el: string) =>
-      parseInt(`0x${el}`, 16)
-    )
-    const emoji = String.fromCodePoint(...codesArray)
+    const emoji = e.native
     setIsShowPicker(false)
     onChange(emoji)
   }
@@ -50,12 +46,7 @@ export const EmojiPicker = ({
           zIndex: 9999,
         }}
       >
-        <Picker
-          data={data}
-          theme="dark"
-          onEmojiSelect={selectEmoji}
-          showPreview={false}
-        />
+        <Picker data={data} theme="dark" onEmojiSelect={selectEmoji} />
       </Box>
     </Box>
   )
