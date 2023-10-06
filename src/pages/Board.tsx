@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
@@ -23,6 +23,9 @@ import {
 } from '../store/boards/boards.slice'
 import { IBoard } from '../store/boards/boards.types'
 import { AppDispatch, RootState } from '../store/store'
+
+let timerInput: NodeJS.Timeout
+const timeout: number = 500
 
 export const Board = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -53,16 +56,40 @@ export const Board = () => {
   }, [board.item])
 
   const onIconChange = async (newIcon: string) => {
+    setIcon(newIcon)
     const temp: IBoard[] = [...boards.items]
     const index = temp.findIndex((e) => e.id === boardsId)
     temp[index] = { ...temp[index], icon: newIcon }
-
-    setIcon(newIcon)
 
     dispatch(boardActions.setBoards(temp))
     if (boardsId) {
       dispatch(fetchUpdateBoard({ id: boardsId, params: { icon: newIcon } }))
     }
+  }
+
+  const updateTitle = async (e: ChangeEvent<HTMLInputElement>) => {
+    clearTimeout(timerInput)
+    const newTitle = e.target.value
+    console.log(newTitle)
+    setTitle(newTitle)
+
+    const temp: IBoard[] = [...boards.items]
+    const index = temp.findIndex((e) => e.id === boardsId)
+    temp[index] = { ...temp[index], title: newTitle }
+
+    dispatch(boardActions.setBoards(temp))
+
+    timerInput = setTimeout(async () => {
+      try {
+        if (boardsId) {
+          dispatch(
+            fetchUpdateBoard({ id: boardsId, params: { title: newTitle } })
+          )
+        }
+      } catch (err) {
+        alert(err)
+      }
+    }, timeout)
   }
 
   return (
@@ -92,6 +119,7 @@ export const Board = () => {
               <EmojiPicker icon={icon} onChange={onIconChange} />
               <TextField
                 value={title}
+                onChange={updateTitle}
                 placeholder="Без названия..."
                 variant="outlined"
                 fullWidth

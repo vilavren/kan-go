@@ -108,8 +108,8 @@ const boardsSlice = createSlice({
     })
 
     // fetchGetOneBoard
-    builder.addCase(fetchGetOneBoard.pending, (state) => {
-      state.board.status = Status.LOADING
+    builder.addCase(fetchGetOneBoard.pending, () => {
+      // state.board.status = Status.LOADING
     })
     builder.addCase(fetchGetOneBoard.fulfilled, (state, action) => {
       state.board.status = Status.SUCCESS

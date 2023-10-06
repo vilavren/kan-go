@@ -178,7 +178,7 @@ export const Sidebar = () => {
                             textOverflow: 'ellipsis',
                           }}
                         >
-                          {i.icon} {i.id}
+                          {i.icon} {i.title}
                         </Typography>
                       </ListItemButton>
                     )}
