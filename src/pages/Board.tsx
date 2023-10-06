@@ -70,7 +70,6 @@ export const Board = () => {
   const updateTitle = async (e: ChangeEvent<HTMLInputElement>) => {
     clearTimeout(timerInput)
     const newTitle = e.target.value
-    console.log(newTitle)
     setTitle(newTitle)
 
     const temp: IBoard[] = [...boards.items]
@@ -86,8 +85,29 @@ export const Board = () => {
             fetchUpdateBoard({ id: boardsId, params: { title: newTitle } })
           )
         }
-      } catch (err) {
-        alert(err)
+      } catch (error) {
+        alert(error)
+      }
+    }, timeout)
+  }
+
+  const updateDescription = async (e: ChangeEvent<HTMLInputElement>) => {
+    clearTimeout(timerInput)
+    const newDescription = e.target.value
+    setDescription(newDescription)
+
+    timerInput = setTimeout(async () => {
+      try {
+        if (boardsId) {
+          dispatch(
+            fetchUpdateBoard({
+              id: boardsId,
+              params: { description: newDescription },
+            })
+          )
+        }
+      } catch (error) {
+        alert(error)
       }
     }, timeout)
   }
@@ -134,6 +154,7 @@ export const Board = () => {
               />
               <TextField
                 value={description}
+                onChange={updateDescription}
                 placeholder="Описание..."
                 variant="outlined"
                 multiline
@@ -141,7 +162,10 @@ export const Board = () => {
                 sx={{
                   '& .MuiOutlinedInput-input': { padding: 0 },
                   '& .MuiOutlinedInput-notchedOutline': { border: 'unset ' },
-                  '& .MuiOutlinedInput-root': { fontSize: '0.8rem' },
+                  '& .MuiOutlinedInput-root': {
+                    fontSize: '1rem',
+                    padding: '10px 4px',
+                  },
                 }}
               />
             </Box>
