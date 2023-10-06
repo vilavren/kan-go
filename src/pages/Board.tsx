@@ -16,7 +16,12 @@ import { useParams } from 'react-router-dom'
 import { EmojiPicker } from '../components/common/EmojiPicker'
 import { Loading } from '../components/common/Loading'
 import { Status } from '../interfaces/status.enum'
-import { fetchGetOneBoard } from '../store/boards/boards.slice'
+import {
+  boardActions,
+  fetchGetOneBoard,
+  fetchUpdateBoard,
+} from '../store/boards/boards.slice'
+import { IBoard } from '../store/boards/boards.types'
 import { AppDispatch, RootState } from '../store/store'
 
 export const Board = () => {
@@ -27,7 +32,7 @@ export const Board = () => {
   const [sections, setSections] = useState<[]>([])
   const [isFavorite, setIsFavorite] = useState<boolean>(false)
   const [icon, setIcon] = useState<string>('')
-  const { board } = useSelector((s: RootState) => s.boards)
+  const { board, boards } = useSelector((s: RootState) => s.boards)
   // const { favorite } = useSelector((s: RootState) => s)
   const { boardsId } = useParams<string>()
 
@@ -48,7 +53,16 @@ export const Board = () => {
   }, [board.item])
 
   const onIconChange = async (newIcon: string) => {
+    const temp: IBoard[] = [...boards.items]
+    const index = temp.findIndex((e) => e.id === boardsId)
+    temp[index] = { ...temp[index], icon: newIcon }
+
     setIcon(newIcon)
+
+    dispatch(boardActions.setBoards(temp))
+    if (boardsId) {
+      dispatch(fetchUpdateBoard({ id: boardsId, params: { icon: newIcon } }))
+    }
   }
 
   return (

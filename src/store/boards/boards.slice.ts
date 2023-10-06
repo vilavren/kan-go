@@ -50,7 +50,7 @@ export const fetchGetOneBoard = createAsyncThunk(
 
 export const fetchUpdateBoard = createAsyncThunk(
   'boards/updateBoard',
-  async ({ id, params }: { id: string; params: IBoardUpdate[] }) => {
+  async ({ id, params }: { id: string; params: IBoardUpdate }) => {
     const res = await axios.put<IBoard>(`/boards/${id}`, params)
     return res.data
   }
@@ -121,12 +121,12 @@ const boardsSlice = createSlice({
     })
 
     // fetchUpdateBoard
-    builder.addCase(fetchUpdateBoard.pending, (state) => {
-      state.board.status = Status.LOADING
+    builder.addCase(fetchUpdateBoard.pending, () => {
+      // state.board.status = Status.LOADING
     })
-    builder.addCase(fetchUpdateBoard.fulfilled, (state, action) => {
+    builder.addCase(fetchUpdateBoard.fulfilled, (state) => {
       state.board.status = Status.SUCCESS
-      state.board.item = action.payload
+      // state.board.item = action.payload
     })
     builder.addCase(fetchUpdateBoard.rejected, (state) => {
       state.board.status = Status.ERROR

@@ -13,7 +13,7 @@ export const EmojiPicker = ({
   icon,
   onChange,
 }: EmojiPickerProps): JSX.Element => {
-  const [selectedEmoji, setSelectedEmoji] = useState<string | undefined>()
+  const [selectedEmoji, setSelectedEmoji] = useState<string>()
   const [isShowPicker, setIsShowPicker] = useState(false)
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export const EmojiPicker = ({
         <Picker
           data={data}
           theme="dark"
-          onSelect={selectEmoji}
+          onEmojiSelect={selectEmoji}
           showPreview={false}
         />
       </Box>
