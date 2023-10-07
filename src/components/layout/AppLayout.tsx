@@ -36,7 +36,8 @@ export const AppLayout = () => {
             sx={{
               flexGrow: 1,
               p: 1,
-              width: 'max-content',
+              width: '100vw',
+              height: '100vh',
             }}
           >
             <Outlet />

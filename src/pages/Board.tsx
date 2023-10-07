@@ -129,12 +129,12 @@ export const Board = () => {
             <IconButton>
               {isFavorite ? <StarIcon /> : <StarOutlineOutlinedIcon />}
             </IconButton>
-            {board.item?.id}
+
             <IconButton>
               <DeleteOutlineIcon />
             </IconButton>
           </Box>
-          <Box sx={{ padding: '10px 50px' }}>
+          <Box sx={{ padding: '20px 20px' }}>
             <Box>
               <EmojiPicker icon={icon} onChange={onIconChange} />
               <TextField
