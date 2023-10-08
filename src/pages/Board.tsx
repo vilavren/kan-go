@@ -112,6 +112,24 @@ export const Board = () => {
     }, timeout)
   }
 
+  const addFavorite = async () => {
+    try {
+      if (boardsId) {
+        dispatch(
+          fetchUpdateBoard({
+            id: boardsId,
+            params: {
+              favourite: !isFavorite,
+            },
+          })
+        )
+        setIsFavorite(!isFavorite)
+      }
+    } catch (error) {
+      alert(error)
+    }
+  }
+
   return (
     <>
       {board.status === Status.LOADING ? (
@@ -126,7 +144,7 @@ export const Board = () => {
               width: '100%',
             }}
           >
-            <IconButton>
+            <IconButton onClick={addFavorite}>
               {isFavorite ? <StarIcon /> : <StarOutlineOutlinedIcon />}
             </IconButton>
 
