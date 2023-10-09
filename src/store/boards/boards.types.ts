@@ -18,8 +18,8 @@ export interface IBoard {
   title: string
   description: string
   position: number
-  favourite: boolean
-  favouritePosition: number
+  favorite: boolean
+  favoritePosition: number
   __v: number
   sections: []
   id: string
@@ -30,5 +30,5 @@ export interface IBoardUpdate {
   title?: string
   description?: string
   sections?: []
-  favourite?: boolean
+  favorite?: boolean
 }

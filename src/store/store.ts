@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 
 import { authReducer } from './auth/auth.slice'
 import { boardReducer } from './boards/boards.slice'
-import { favoriteReducer } from './favourite/favourite.slice'
+import { favoriteReducer } from './favorite/favorite.slice'
 import { saveState } from './storage'
 
 export const store = configureStore({

@@ -50,7 +50,7 @@ export const Board = () => {
       setTitle(board.item.title)
       setDescription(board.item.description)
       setSections(board.item.sections)
-      setIsFavorite(board.item.favourite)
+      setIsFavorite(board.item.favorite)
       setIcon(board.item.icon)
     }
   }, [board.item])
@@ -119,7 +119,7 @@ export const Board = () => {
           fetchUpdateBoard({
             id: boardsId,
             params: {
-              favourite: !isFavorite,
+              favorite: !isFavorite,
             },
           })
         )
@@ -145,7 +145,11 @@ export const Board = () => {
             }}
           >
             <IconButton onClick={addFavorite}>
-              {isFavorite ? <StarIcon /> : <StarOutlineOutlinedIcon />}
+              {isFavorite ? (
+                <StarIcon color="warning" />
+              ) : (
+                <StarOutlineOutlinedIcon />
+              )}
             </IconButton>
 
             <IconButton>
