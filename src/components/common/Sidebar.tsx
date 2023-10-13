@@ -28,6 +28,8 @@ import {
 } from '../../store/boards/boards.slice'
 import { AppDispatch, RootState } from '../../store/store'
 
+import { FavoritesBoards } from './FavoritesBoards'
+
 export const Sidebar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
@@ -112,20 +114,7 @@ export const Sidebar = () => {
           </Box>
         </ListItem>
         <Box sx={{ paddingTop: '10px' }}></Box>
-        <ListItem>
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Typography variant="body2" fontWeight={700}>
-              Закрепленные
-            </Typography>
-          </Box>
-        </ListItem>
+        <FavoritesBoards />
         <Box sx={{ paddingTop: '10px' }}></Box>
         <ListItem>
           <Box
