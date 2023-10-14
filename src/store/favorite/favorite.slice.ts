@@ -19,6 +19,14 @@ export const fetchGetFavorites = createAsyncThunk(
   }
 )
 
+export const fetchUpdateFavoritesPositionBoards = createAsyncThunk(
+  'boards/updateFavoritesPositionBoards',
+  async (params: IBoard[]) => {
+    const res = await axios.put<IBoard[]>('/favorites', params)
+    return res.data
+  }
+)
+
 const favoritesSlice = createSlice({
   name: 'favorites',
   initialState,
@@ -40,6 +48,17 @@ const favoritesSlice = createSlice({
     builder.addCase(fetchGetFavorites.rejected, (state) => {
       state.status = Status.ERROR
       state.items = []
+    })
+
+    // updateFavoritesPositionBoards
+    builder.addCase(fetchUpdateFavoritesPositionBoards.pending, (state) => {
+      state.status = Status.LOADING
+    })
+    builder.addCase(fetchUpdateFavoritesPositionBoards.fulfilled, (state) => {
+      state.status = Status.SUCCESS
+    })
+    builder.addCase(fetchUpdateFavoritesPositionBoards.rejected, (state) => {
+      state.status = Status.ERROR
     })
   },
 })

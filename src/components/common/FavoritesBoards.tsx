@@ -11,7 +11,11 @@ import { useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { boardActions } from '../../store/boards/boards.slice'
-import { fetchGetFavorites } from '../../store/favorite/favorite.slice'
+import {
+  favoritesActions,
+  fetchGetFavorites,
+  fetchUpdateFavoritesPositionBoards,
+} from '../../store/favorite/favorite.slice'
 import { AppDispatch, RootState } from '../../store/store'
 
 export const FavoritesBoards = (): JSX.Element => {
@@ -33,7 +37,20 @@ export const FavoritesBoards = (): JSX.Element => {
     dispatch(boardActions.setActiveBoard(items[activeItem]))
   }, [items, boardsId, navigate])
 
-  const onDragEnd = () => {}
+  const onDragEnd = ({ source, destination }: DropResult) => {
+    if (!destination) {
+      return
+    }
+    const newList = [...items]
+    const [removed] = newList.splice(source.index, 1)
+    newList.splice(destination.index, 0, removed)
+
+    const activeItem = newList.findIndex((e) => e.id === boardsId)
+    dispatch(boardActions.setActiveBoard(newList[activeItem]))
+    dispatch(favoritesActions.setFavoritesBoards(newList))
+    dispatch(fetchUpdateFavoritesPositionBoards(newList))
+    setActiveIndex(activeItem)
+  }
 
   return (
     <>
