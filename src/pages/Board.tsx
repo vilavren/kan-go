@@ -11,13 +11,14 @@ import {
 } from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { EmojiPicker } from '../components/common/EmojiPicker'
 import { Loading } from '../components/common/Loading'
 import { Status } from '../interfaces/status.enum'
 import {
   boardActions,
+  fetchDeleteOneBoard,
   fetchGetOneBoard,
   fetchUpdateBoard,
 } from '../store/boards/boards.slice'
@@ -29,7 +30,7 @@ const timeout: number = 500
 
 export const Board = () => {
   const dispatch = useDispatch<AppDispatch>()
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
   const [sections, setSections] = useState<[]>([])
@@ -142,6 +143,24 @@ export const Board = () => {
     }
   }
 
+  const deleteBoard = async () => {
+    if (boardsId) {
+      dispatch(fetchDeleteOneBoard(boardsId))
+    }
+    if (isFavorite) {
+      const tempFavorites = favoritesItem.filter((e) => e.id !== boardsId)
+      dispatch(favoritesActions.setFavoritesBoards(tempFavorites))
+    }
+
+    const tempBoards = boards.items.filter((e) => e.id !== boardsId)
+    if (tempBoards.length === 0) {
+      navigate('/boards')
+    } else {
+      navigate(`/boards/${tempBoards[0].id}`)
+    }
+    dispatch(boardActions.setBoards(tempBoards))
+  }
+
   return (
     <>
       {board.status === Status.LOADING ? (
@@ -164,8 +183,8 @@ export const Board = () => {
               )}
             </IconButton>
 
-            <IconButton>
-              <DeleteOutlineIcon />
+            <IconButton onClick={deleteBoard}>
+              <DeleteOutlineIcon color="error" />
             </IconButton>
           </Box>
           <Box

@@ -56,6 +56,14 @@ export const fetchUpdateBoard = createAsyncThunk(
   }
 )
 
+export const fetchDeleteOneBoard = createAsyncThunk(
+  'boards/fetchDeleteOneBoard',
+  async (id: string) => {
+    const res = await axios.delete(`/boards/${id}`)
+    return res.data
+  }
+)
+
 const boardsSlice = createSlice({
   name: 'boards',
   initialState,
@@ -131,6 +139,18 @@ const boardsSlice = createSlice({
     builder.addCase(fetchUpdateBoard.rejected, (state) => {
       state.board.status = Status.ERROR
       state.board.item = undefined
+    })
+
+    // fetchDeleteOneBoard
+    builder.addCase(fetchDeleteOneBoard.pending, () => {
+      // state.board.status = Status.LOADING
+    })
+    builder.addCase(fetchDeleteOneBoard.fulfilled, (state) => {
+      state.board.status = Status.SUCCESS
+      // state.board.item = action.payload
+    })
+    builder.addCase(fetchDeleteOneBoard.rejected, (state) => {
+      state.board.status = Status.ERROR
     })
   },
 })
