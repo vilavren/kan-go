@@ -156,7 +156,11 @@ export const Board = () => {
               <DeleteOutlineIcon />
             </IconButton>
           </Box>
-          <Box sx={{ padding: '20px 20px' }}>
+          <Box
+            sx={{
+              padding: '20px 20px',
+            }}
+          >
             <Box>
               <EmojiPicker icon={icon} onChange={onIconChange} />
               <TextField
