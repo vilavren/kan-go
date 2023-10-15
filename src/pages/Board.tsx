@@ -138,6 +138,16 @@ export const Board = () => {
         )
         setIsFavorite(!isFavorite)
       }
+
+      let tempFavorites = [...favoritesItem]
+      if (isFavorite) {
+        tempFavorites = tempFavorites.filter((e) => e.id !== boardsId)
+      } else {
+        if (board.item) {
+          tempFavorites.push(board.item)
+          dispatch(favoritesActions.setFavoritesBoards(tempFavorites))
+        }
+      }
     } catch (error) {
       alert(error)
     }
