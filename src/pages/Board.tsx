@@ -21,7 +21,7 @@ import {
   fetchGetOneBoard,
   fetchUpdateBoard,
 } from '../store/boards/boards.slice'
-import { IBoard } from '../store/boards/boards.types'
+import { favoritesActions } from '../store/favorite/favorite.slice'
 import { AppDispatch, RootState } from '../store/store'
 
 let timerInput: NodeJS.Timeout
@@ -36,7 +36,7 @@ export const Board = () => {
   const [isFavorite, setIsFavorite] = useState<boolean>(false)
   const [icon, setIcon] = useState<string>('')
   const { board, boards } = useSelector((s: RootState) => s.boards)
-  // const { favorite } = useSelector((s: RootState) => s)
+  const favoritesItem = useSelector((s: RootState) => s.favorites.items)
   const { boardsId } = useParams<string>()
 
   useEffect(() => {
@@ -55,28 +55,40 @@ export const Board = () => {
     }
   }, [board.item])
 
-  const onIconChange = async (newIcon: string) => {
-    setIcon(newIcon)
-    const temp: IBoard[] = [...boards.items]
+  const updateBoard = (fieldName: string, fieldValue: string) => {
+    const temp = [...boards.items]
     const index = temp.findIndex((e) => e.id === boardsId)
-    temp[index] = { ...temp[index], icon: newIcon }
+    temp[index] = { ...temp[index], [fieldName]: fieldValue }
+
+    if (isFavorite) {
+      const tempFavorites = [...favoritesItem]
+      const favoriteIndex = tempFavorites.findIndex((e) => e.id === boardsId)
+      tempFavorites[favoriteIndex] = {
+        ...tempFavorites[favoriteIndex],
+        [fieldName]: fieldValue,
+      }
+      dispatch(favoritesActions.setFavoritesBoards(tempFavorites))
+    }
 
     dispatch(boardActions.setBoards(temp))
+
     if (boardsId) {
-      dispatch(fetchUpdateBoard({ id: boardsId, params: { icon: newIcon } }))
+      dispatch(
+        fetchUpdateBoard({ id: boardsId, params: { [fieldName]: fieldValue } })
+      )
     }
+  }
+
+  const onIconChange = async (newIcon: string) => {
+    setIcon(newIcon)
+    updateBoard('icon', newIcon)
   }
 
   const updateTitle = async (e: ChangeEvent<HTMLInputElement>) => {
     clearTimeout(timerInput)
     const newTitle = e.target.value
     setTitle(newTitle)
-
-    const temp: IBoard[] = [...boards.items]
-    const index = temp.findIndex((e) => e.id === boardsId)
-    temp[index] = { ...temp[index], title: newTitle }
-
-    dispatch(boardActions.setBoards(temp))
+    updateBoard('title', newTitle)
 
     timerInput = setTimeout(async () => {
       try {
