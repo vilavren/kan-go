@@ -1,19 +1,13 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import StarIcon from '@mui/icons-material/Star'
 import StarOutlineOutlinedIcon from '@mui/icons-material/StarOutlineOutlined'
-import {
-  Box,
-  Button,
-  Divider,
-  IconButton,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Box, IconButton, TextField } from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { EmojiPicker } from '../components/common/EmojiPicker'
+import { Kanban } from '../components/common/Kanban'
 import { Loading } from '../components/common/Loading'
 import { Status } from '../interfaces/status.enum'
 import {
@@ -33,7 +27,6 @@ export const Board = () => {
   const navigate = useNavigate()
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
-  const [sections, setSections] = useState<[]>([])
   const [isFavorite, setIsFavorite] = useState<boolean>(false)
   const [icon, setIcon] = useState<string>('')
   const { board, boards } = useSelector((s: RootState) => s.boards)
@@ -50,7 +43,6 @@ export const Board = () => {
     if (board.item) {
       setTitle(board.item.title)
       setDescription(board.item.description)
-      setSections(board.item.sections)
       setIsFavorite(board.item.favorite)
       setIcon(board.item.icon)
     }
@@ -227,20 +219,9 @@ export const Board = () => {
                 }}
               />
             </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                width: '100%',
-              }}
-            >
-              <Button>Добавить раздел</Button>
-              <Typography variant="body2" fontWeight="700">
-                разделов: {sections?.length}
-              </Typography>
+            <Box>
+              <Kanban />
             </Box>
-            <Divider sx={{ margin: '10px 0' }}></Divider>
           </Box>
         </>
       )}
