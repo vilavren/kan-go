@@ -8,7 +8,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useEffect } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -20,8 +19,6 @@ export const Kanban = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { sections } = useSelector((s: RootState) => s.sections)
   const { boardsId } = useParams<string>()
-
-  useEffect(() => {}, [])
 
   const onDragEnd = () => {}
 

@@ -84,7 +84,7 @@ export const Sidebar = () => {
       open
       sx={{
         width: sidebarWidth,
-        height: '100%',
+        height: '100vh',
         '& > div': { borderRight: 'none' },
       }}
     >

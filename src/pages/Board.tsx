@@ -17,6 +17,7 @@ import {
   fetchUpdateBoard,
 } from '../store/boards/boards.slice'
 import { favoritesActions } from '../store/favorite/favorite.slice'
+import { sectionsActions } from '../store/sections/sections.slice'
 import { AppDispatch, RootState } from '../store/store'
 
 let timerInput: NodeJS.Timeout
@@ -34,10 +35,19 @@ export const Board = () => {
   const { boardsId } = useParams<string>()
 
   useEffect(() => {
+    if (boards.items.length === 0) {
+      navigate('/')
+    }
     if (boardsId) {
       dispatch(fetchGetOneBoard(boardsId))
     }
   }, [boardsId, dispatch])
+
+  useEffect(() => {
+    if (board.item?.sections) {
+      dispatch(sectionsActions.setSections(board.item?.sections))
+    }
+  }, [board.item?.sections])
 
   useEffect(() => {
     if (board.item) {
@@ -47,6 +57,9 @@ export const Board = () => {
       setIcon(board.item.icon)
     }
   }, [board.item])
+
+  console.log('boardsId:', boardsId)
+  console.log('board ID:', board.item?.id)
 
   const updateBoard = (fieldName: string, fieldValue: string) => {
     const temp = [...boards.items]
@@ -146,7 +159,10 @@ export const Board = () => {
     }
 
     const tempBoards = boards.items.filter((e) => e.id !== boardsId)
-    if (tempBoards.length === 0) {
+    console.log('tempBoards:', tempBoards)
+    if (tempBoards.length <= 0) {
+      dispatch(boardActions.setActiveBoard(undefined))
+      dispatch(sectionsActions.setSections([]))
       navigate('/boards')
     } else {
       navigate(`/boards/${tempBoards[0].id}`)

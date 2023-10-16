@@ -8,11 +8,11 @@ import { IBoard, IBoardUpdate, IBoardsState } from './boards.types'
 const initialState: IBoardsState = {
   board: {
     item: undefined,
-    status: Status.LOADING,
+    status: Status.SUCCESS,
   },
   boards: {
     items: [],
-    status: Status.LOADING,
+    status: Status.SUCCESS,
   },
 }
 
@@ -68,7 +68,7 @@ const boardsSlice = createSlice({
   name: 'boards',
   initialState,
   reducers: {
-    setActiveBoard: (state, action: PayloadAction<IBoard>) => {
+    setActiveBoard: (state, action: PayloadAction<IBoard | undefined>) => {
       state.board.item = action.payload
     },
     setBoards: (state, action: PayloadAction<IBoard[]>) => {

@@ -1,3 +1,4 @@
+import { Box, Container } from '@mui/material'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, Outlet } from 'react-router-dom'
@@ -22,8 +23,17 @@ export const AuthLayout = () => {
     return <Navigate to="/" replace />
   }
   return (
-    <div>
-      <Outlet />
-    </div>
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}
+      >
+        <Outlet />
+      </Box>
+    </Container>
   )
 }

@@ -8,16 +8,16 @@ import { ISection, ISectionsState } from './sections.types'
 const initialState: ISectionsState = {
   section: {
     item: undefined,
-    status: Status.LOADING,
+    status: Status.SUCCESS,
   },
   sections: {
     items: [],
-    status: Status.LOADING,
+    status: Status.SUCCESS,
   },
 }
 
 export const fetchCreateSection = createAsyncThunk(
-  'boards/createBoard',
+  'boards/createSection',
   async (boardId: string) => {
     const res = await axios.post<ISection>(`/boards/${boardId}/sections`)
     return res.data
@@ -31,15 +31,15 @@ const sectionsSlice = createSlice({
     setActiveSection: (state, action: PayloadAction<ISection>) => {
       state.section.item = action.payload
     },
+    setSections: (state, action: PayloadAction<ISection[]>) => {
+      state.sections.items = action.payload
+    },
   },
   extraReducers(builder) {
     // createSection
-    builder.addCase(fetchCreateSection.pending, () => {
-      // state.section.status = Status.LOADING
-    })
+    builder.addCase(fetchCreateSection.pending, () => {})
     builder.addCase(fetchCreateSection.fulfilled, (state, action) => {
       state.section.status = Status.SUCCESS
-      state.section.item = action.payload
       state.sections.items = [action.payload, ...state.sections.items]
     })
     builder.addCase(fetchCreateSection.rejected, (state) => {

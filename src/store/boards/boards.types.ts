@@ -1,4 +1,5 @@
 import { Status } from '../../interfaces/status.enum'
+import { ISection } from '../sections/sections.types'
 
 export interface IBoardsState {
   board: {
@@ -21,7 +22,7 @@ export interface IBoard {
   favorite: boolean
   favoritePosition: number
   __v: number
-  sections: []
+  sections: ISection[] | undefined
   id: string
 }
 
@@ -29,6 +30,6 @@ export interface IBoardUpdate {
   icon?: string
   title?: string
   description?: string
-  sections?: []
+  sections?: ISection[]
   favorite?: boolean
 }

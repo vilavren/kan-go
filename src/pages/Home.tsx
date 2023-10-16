@@ -13,7 +13,7 @@ export const Home = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { board } = useSelector((s: RootState) => s.boards)
 
-  const isBoardLoading = board.status !== Status.LOADING
+  const isBoardLoading = board.status === Status.LOADING
   const boardId = board.item?.id
 
   useEffect(() => {
