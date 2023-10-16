@@ -72,17 +72,27 @@ export const Board = () => {
     }
 
     dispatch(boardActions.setBoards(temp))
-
-    if (boardsId) {
-      dispatch(
-        fetchUpdateBoard({ id: boardsId, params: { [fieldName]: fieldValue } })
-      )
-    }
   }
 
   const onIconChange = async (newIcon: string) => {
     setIcon(newIcon)
     updateBoard('icon', newIcon)
+    if (boardsId) {
+      dispatch(fetchUpdateBoard({ id: boardsId, params: { icon: newIcon } }))
+    }
+  }
+
+  const timerFetchUpdateBoard = async (params: {
+    title?: string
+    description?: string
+  }) => {
+    try {
+      if (boardsId) {
+        dispatch(fetchUpdateBoard({ id: boardsId, params }))
+      }
+    } catch (error) {
+      alert(error)
+    }
   }
 
   const updateTitle = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -92,15 +102,7 @@ export const Board = () => {
     updateBoard('title', newTitle)
 
     timerInput = setTimeout(async () => {
-      try {
-        if (boardsId) {
-          dispatch(
-            fetchUpdateBoard({ id: boardsId, params: { title: newTitle } })
-          )
-        }
-      } catch (error) {
-        alert(error)
-      }
+      await timerFetchUpdateBoard({ title: newTitle })
     }, timeout)
   }
 
@@ -110,18 +112,7 @@ export const Board = () => {
     setDescription(newDescription)
 
     timerInput = setTimeout(async () => {
-      try {
-        if (boardsId) {
-          dispatch(
-            fetchUpdateBoard({
-              id: boardsId,
-              params: { description: newDescription },
-            })
-          )
-        }
-      } catch (error) {
-        alert(error)
-      }
+      await timerFetchUpdateBoard({ description: newDescription })
     }, timeout)
   }
 
