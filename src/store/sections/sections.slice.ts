@@ -34,12 +34,13 @@ const sectionsSlice = createSlice({
   },
   extraReducers(builder) {
     // createSection
-    builder.addCase(fetchCreateSection.pending, (state) => {
-      state.section.status = Status.LOADING
+    builder.addCase(fetchCreateSection.pending, () => {
+      // state.section.status = Status.LOADING
     })
     builder.addCase(fetchCreateSection.fulfilled, (state, action) => {
       state.section.status = Status.SUCCESS
       state.section.item = action.payload
+      state.sections.items = [action.payload, ...state.sections.items]
     })
     builder.addCase(fetchCreateSection.rejected, (state) => {
       state.section.status = Status.ERROR

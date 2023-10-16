@@ -6,7 +6,7 @@ export interface ISectionsState {
     status: Status
   }
   sections: {
-    items: []
+    items: ISection[]
     status: Status
   }
 }
