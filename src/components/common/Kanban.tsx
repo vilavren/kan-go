@@ -12,7 +12,11 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
-import { fetchCreateSection } from '../../store/sections/sections.slice'
+import {
+  fetchCreateSection,
+  fetchDeleteSection,
+  sectionsActions,
+} from '../../store/sections/sections.slice'
 import { AppDispatch, RootState } from '../../store/store'
 
 export const Kanban = () => {
@@ -26,6 +30,14 @@ export const Kanban = () => {
     if (boardsId) {
       dispatch(fetchCreateSection(boardsId))
     }
+  }
+
+  const deleteSection = (sectionId: string) => {
+    if (boardsId) {
+      dispatch(fetchDeleteSection({ boardId: boardsId, sectionId: sectionId }))
+    }
+    const newSections = [...sections.items].filter((e) => e.id !== sectionId)
+    dispatch(sectionsActions.setSections(newSections))
   }
 
   return (
@@ -105,6 +117,7 @@ export const Kanban = () => {
                           color: 'gray',
                           '&:hover': { color: 'red' },
                         }}
+                        onClick={() => deleteSection(section.id)}
                       >
                         <DeleteOutlineIcon />
                       </IconButton>

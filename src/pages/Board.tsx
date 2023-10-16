@@ -35,9 +35,6 @@ export const Board = () => {
   const { boardsId } = useParams<string>()
 
   useEffect(() => {
-    if (boards.items.length === 0) {
-      navigate('/')
-    }
     if (boardsId) {
       dispatch(fetchGetOneBoard(boardsId))
     }
@@ -57,9 +54,6 @@ export const Board = () => {
       setIcon(board.item.icon)
     }
   }, [board.item])
-
-  console.log('boardsId:', boardsId)
-  console.log('board ID:', board.item?.id)
 
   const updateBoard = (fieldName: string, fieldValue: string) => {
     const temp = [...boards.items]
@@ -159,7 +153,6 @@ export const Board = () => {
     }
 
     const tempBoards = boards.items.filter((e) => e.id !== boardsId)
-    console.log('tempBoards:', tempBoards)
     if (tempBoards.length <= 0) {
       dispatch(boardActions.setActiveBoard(undefined))
       dispatch(sectionsActions.setSections([]))

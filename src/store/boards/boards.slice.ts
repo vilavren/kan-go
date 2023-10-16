@@ -41,7 +41,7 @@ export const fetchUpdatePositionBoards = createAsyncThunk(
 )
 
 export const fetchGetOneBoard = createAsyncThunk(
-  'boards/fetchGetOneBoard',
+  'boards/getOneBoard',
   async (id: string) => {
     const res = await axios.get(`/boards/${id}`)
     return res.data
@@ -57,7 +57,7 @@ export const fetchUpdateBoard = createAsyncThunk(
 )
 
 export const fetchDeleteOneBoard = createAsyncThunk(
-  'boards/fetchDeleteOneBoard',
+  'boards/deleteOneBoard',
   async (id: string) => {
     const res = await axios.delete(`/boards/${id}`)
     return res.data
@@ -79,7 +79,7 @@ const boardsSlice = createSlice({
     // getAllBoards
     builder.addCase(fetchGetAllBoards.pending, (state) => {
       state.boards.status = Status.LOADING
-      state.boards.items = []
+      // state.boards.items = []
     })
     builder.addCase(fetchGetAllBoards.fulfilled, (state, action) => {
       state.boards.status = Status.SUCCESS

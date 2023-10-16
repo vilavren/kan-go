@@ -24,6 +24,14 @@ export const fetchCreateSection = createAsyncThunk(
   }
 )
 
+export const fetchDeleteSection = createAsyncThunk(
+  'boards/deleteSection',
+  async ({ boardId, sectionId }: { boardId: string; sectionId: string }) => {
+    const res = await axios.delete(`/boards/${boardId}/sections/${sectionId}`)
+    return res.data
+  }
+)
+
 const sectionsSlice = createSlice({
   name: 'sections',
   initialState,
@@ -40,9 +48,18 @@ const sectionsSlice = createSlice({
     builder.addCase(fetchCreateSection.pending, () => {})
     builder.addCase(fetchCreateSection.fulfilled, (state, action) => {
       state.section.status = Status.SUCCESS
-      state.sections.items = [action.payload, ...state.sections.items]
+      state.sections.items = [...state.sections.items, action.payload]
     })
     builder.addCase(fetchCreateSection.rejected, (state) => {
+      state.section.status = Status.ERROR
+    })
+
+    // deleteSection
+    builder.addCase(fetchDeleteSection.pending, () => {})
+    builder.addCase(fetchDeleteSection.fulfilled, (state) => {
+      state.section.status = Status.SUCCESS
+    })
+    builder.addCase(fetchDeleteSection.rejected, (state) => {
       state.section.status = Status.ERROR
     })
   },
