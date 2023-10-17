@@ -19,3 +19,7 @@ export interface ISection {
   tasks: any[]
   id: string
 }
+
+export interface ISectionUpdate {
+  title?: string
+}

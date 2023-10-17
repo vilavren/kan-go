@@ -8,6 +8,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
+import { ChangeEvent } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -15,9 +16,13 @@ import { useParams } from 'react-router-dom'
 import {
   fetchCreateSection,
   fetchDeleteSection,
+  fetchUpdateSection,
   sectionsActions,
 } from '../../store/sections/sections.slice'
 import { AppDispatch, RootState } from '../../store/store'
+
+let timerInput: NodeJS.Timeout
+const timeout: number = 500
 
 export const Kanban = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -38,6 +43,35 @@ export const Kanban = () => {
     }
     const newSections = [...sections.items].filter((e) => e.id !== sectionId)
     dispatch(sectionsActions.setSections(newSections))
+  }
+
+  const updateSectionTitle = async (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    sectionId: string
+  ) => {
+    clearTimeout(timerInput)
+    const newTitle = e.target.value
+    const newSectionsItems = [...sections.items]
+    const index = newSectionsItems.findIndex((e) => e.id === sectionId)
+    const updatedSection = { ...newSectionsItems[index], title: newTitle }
+    newSectionsItems[index] = updatedSection
+    dispatch(sectionsActions.setSections(newSectionsItems))
+
+    timerInput = setTimeout(async () => {
+      try {
+        if (boardsId) {
+          dispatch(
+            fetchUpdateSection({
+              boardId: boardsId,
+              sectionId: sectionId,
+              params: { title: newTitle },
+            })
+          )
+        }
+      } catch (error) {
+        alert(error)
+      }
+    }, timeout)
   }
 
   return (
@@ -66,14 +100,14 @@ export const Kanban = () => {
           }}
         >
           {sections.items.map((section) => (
-            <div key={section.id} style={{ width: '300px' }}>
+            <div key={section.id} style={{ width: '340px' }}>
               <Droppable key={section.id} droppableId={section.id}>
                 {(provided) => (
                   <Box
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                     sx={{
-                      width: '300px',
+                      width: '340px',
                       padding: '10px',
                       marginRight: '10px',
                     }}
@@ -88,7 +122,8 @@ export const Kanban = () => {
                     >
                       <TextField
                         value={section.title}
-                        placeholder="Untitled"
+                        onChange={(e) => updateSectionTitle(e, section.id)}
+                        placeholder="Заголовок..."
                         variant="outlined"
                         sx={{
                           flexGrow: 1,

@@ -3,7 +3,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { Status } from '../../interfaces/status.enum'
 import axios from '../../utils/axios'
 
-import { ISection, ISectionsState } from './sections.types'
+import { ISection, ISectionUpdate, ISectionsState } from './sections.types'
 
 const initialState: ISectionsState = {
   section: {
@@ -17,7 +17,7 @@ const initialState: ISectionsState = {
 }
 
 export const fetchCreateSection = createAsyncThunk(
-  'boards/createSection',
+  'sections/createSection',
   async (boardId: string) => {
     const res = await axios.post<ISection>(`/boards/${boardId}/sections`)
     return res.data
@@ -25,9 +25,28 @@ export const fetchCreateSection = createAsyncThunk(
 )
 
 export const fetchDeleteSection = createAsyncThunk(
-  'boards/deleteSection',
+  'sections/deleteSection',
   async ({ boardId, sectionId }: { boardId: string; sectionId: string }) => {
     const res = await axios.delete(`/boards/${boardId}/sections/${sectionId}`)
+    return res.data
+  }
+)
+
+export const fetchUpdateSection = createAsyncThunk(
+  'sections/updateSection',
+  async ({
+    boardId,
+    sectionId,
+    params,
+  }: {
+    boardId: string
+    sectionId: string
+    params: ISectionUpdate
+  }) => {
+    const res = await axios.put<ISection>(
+      `/boards/${boardId}/sections/${sectionId}`,
+      params
+    )
     return res.data
   }
 )
@@ -60,6 +79,15 @@ const sectionsSlice = createSlice({
       state.section.status = Status.SUCCESS
     })
     builder.addCase(fetchDeleteSection.rejected, (state) => {
+      state.section.status = Status.ERROR
+    })
+
+    // updateSection
+    builder.addCase(fetchUpdateSection.pending, () => {})
+    builder.addCase(fetchUpdateSection.fulfilled, (state) => {
+      state.section.status = Status.SUCCESS
+    })
+    builder.addCase(fetchUpdateSection.rejected, (state) => {
       state.section.status = Status.ERROR
     })
   },
