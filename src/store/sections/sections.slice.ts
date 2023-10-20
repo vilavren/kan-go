@@ -8,6 +8,12 @@ import {
   fetchUpdateSection,
 } from './sections.asyncActions'
 import { ISectionsState, ISection } from './sections.types'
+import {
+  fetchCreateTask,
+  fetchDeleteTask,
+  fetchUpdateTask,
+  fetchUpdatePositionTask,
+} from './tasks.asyncActions'
 
 const initialState: ISectionsState = {
   section: {
@@ -59,6 +65,36 @@ const sectionsSlice = createSlice({
     builder.addCase(fetchUpdateSection.rejected, (state) => {
       state.section.status = Status.ERROR
     })
+
+    // createTask
+    builder.addCase(fetchCreateTask.pending, () => {})
+    builder.addCase(fetchCreateTask.fulfilled, (state, action) => {
+      const newSectionsItems = [...state.sections.items]
+      const index = newSectionsItems.findIndex(
+        (e) => e.id === action.payload.section.id
+      )
+      newSectionsItems[index].tasks.unshift(action.payload)
+      state.sections.items = newSectionsItems
+    })
+    builder.addCase(fetchCreateTask.rejected, (state) => {
+      state.sections.status = Status.ERROR
+      alert('Не удалось создать задачу, попробуйте еще раз')
+    })
+
+    // deleteTask
+    builder.addCase(fetchDeleteTask.pending, () => {})
+    builder.addCase(fetchDeleteTask.fulfilled, () => {})
+    builder.addCase(fetchDeleteTask.rejected, () => {})
+
+    // updateTask
+    builder.addCase(fetchUpdateTask.pending, () => {})
+    builder.addCase(fetchUpdateTask.fulfilled, () => {})
+    builder.addCase(fetchUpdateTask.rejected, () => {})
+
+    // updatePositionTask
+    builder.addCase(fetchUpdatePositionTask.pending, () => {})
+    builder.addCase(fetchUpdatePositionTask.fulfilled, () => {})
+    builder.addCase(fetchUpdatePositionTask.rejected, () => {})
   },
 })
 

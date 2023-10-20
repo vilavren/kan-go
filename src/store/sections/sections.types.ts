@@ -20,11 +20,39 @@ export interface ISection {
   id: string
 }
 
-export interface ITask {
+export interface ISectionUpdate {
   title: string
+}
+
+export interface ITasksState {
+  task: {
+    item: ITask
+    status: Status
+  }
+  tasks: {
+    items: ITask[]
+    status: Status
+  }
+}
+
+export interface ITask {
+  _id: string
+  section: ITaskSection
+  title: string
+  content: string
+  position: number
+  __v: number
   id: string
 }
 
-export interface ISectionUpdate {
-  title?: string
+export interface ITaskSection {
+  _id: string
+  board: string
+  title: string
+  __v: number
+  id: string
+}
+
+export interface ITaskUpdate {
+  title: string
 }

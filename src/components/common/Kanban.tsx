@@ -20,6 +20,7 @@ import {
   fetchUpdateSection,
 } from '../../store/sections/sections.asyncActions'
 import { sectionsActions } from '../../store/sections/sections.slice'
+import { fetchCreateTask } from '../../store/sections/tasks.asyncActions'
 import { AppDispatch, RootState } from '../../store/store'
 
 let timerInput: NodeJS.Timeout
@@ -59,23 +60,28 @@ export const Kanban = () => {
     dispatch(sectionsActions.setSections(newSectionsItems))
 
     timerInput = setTimeout(async () => {
-      try {
-        if (boardsId) {
-          dispatch(
-            fetchUpdateSection({
-              boardId: boardsId,
-              sectionId: sectionId,
-              params: { title: newTitle },
-            })
-          )
-        }
-      } catch (error) {
-        alert(error)
+      if (boardsId) {
+        dispatch(
+          fetchUpdateSection({
+            boardId: boardsId,
+            sectionId: sectionId,
+            params: { title: newTitle },
+          })
+        )
       }
     }, timeout)
   }
 
-  const createTask = () => {}
+  const createTask = (sectionId: string) => {
+    if (boardsId) {
+      dispatch(
+        fetchCreateTask({
+          boardId: boardsId,
+          params: { sectionId: sectionId },
+        })
+      )
+    }
+  }
 
   return (
     <>
@@ -146,7 +152,7 @@ export const Kanban = () => {
                           color: 'gray',
                           '&:hover': { color: 'green' },
                         }}
-                        onClick={() => createTask()}
+                        onClick={() => createTask(section.id)}
                       >
                         <AddCircleOutlineOutlinedIcon />
                       </IconButton>

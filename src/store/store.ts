@@ -3,8 +3,8 @@ import { configureStore } from '@reduxjs/toolkit'
 import { authReducer } from './auth/auth.slice'
 import { boardReducer } from './boards/boards.slice'
 import { favoritesReducer } from './favorite/favorite.slice'
-import { sectionsReducer } from './sections/sections.slice'
 import { saveState } from './localStorage'
+import { sectionsReducer } from './sections/sections.slice'
 
 export const store = configureStore({
   reducer: {

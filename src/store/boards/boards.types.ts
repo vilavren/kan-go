@@ -22,7 +22,7 @@ export interface IBoard {
   favorite: boolean
   favoritePosition: number
   __v: number
-  sections: ISection[] | undefined
+  sections: ISection[] | []
   id: string
 }
 
