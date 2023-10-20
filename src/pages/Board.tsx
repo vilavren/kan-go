@@ -11,11 +11,11 @@ import { Kanban } from '../components/common/Kanban'
 import { Loading } from '../components/common/Loading'
 import { Status } from '../interfaces/status.enum'
 import {
-  boardActions,
-  fetchDeleteOneBoard,
   fetchGetOneBoard,
   fetchUpdateBoard,
-} from '../store/boards/boards.slice'
+  fetchDeleteOneBoard,
+} from '../store/boards/boards.asyncActions'
+import { boardActions } from '../store/boards/boards.slice'
 import { favoritesActions } from '../store/favorite/favorite.slice'
 import { sectionsActions } from '../store/sections/sections.slice'
 import { AppDispatch, RootState } from '../store/store'

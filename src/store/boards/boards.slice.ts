@@ -1,9 +1,16 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { Status } from '../../interfaces/status.enum'
-import axios from '../../utils/axios'
 
-import { IBoard, IBoardUpdate, IBoardsState } from './boards.types'
+import {
+  fetchGetAllBoards,
+  fetchCreateBoard,
+  fetchUpdatePositionBoards,
+  fetchGetOneBoard,
+  fetchUpdateBoard,
+  fetchDeleteOneBoard,
+} from './boards.asyncActions'
+import { IBoard, IBoardsState } from './boards.types'
 
 const initialState: IBoardsState = {
   board: {
@@ -15,54 +22,6 @@ const initialState: IBoardsState = {
     status: Status.SUCCESS,
   },
 }
-
-export const fetchGetAllBoards = createAsyncThunk(
-  'boards/getAllBoards',
-  async () => {
-    const res = await axios.get<IBoard[]>('/boards')
-    return res.data
-  }
-)
-
-export const fetchCreateBoard = createAsyncThunk(
-  'boards/createBoard',
-  async () => {
-    const res = await axios.post<IBoard>('/boards')
-    return res.data
-  }
-)
-
-export const fetchUpdatePositionBoards = createAsyncThunk(
-  'boards/updatePositionBoards',
-  async (params: IBoard[]) => {
-    const res = await axios.put<IBoard[]>('/boards', params)
-    return res.data
-  }
-)
-
-export const fetchGetOneBoard = createAsyncThunk(
-  'boards/getOneBoard',
-  async (id: string) => {
-    const res = await axios.get(`/boards/${id}`)
-    return res.data
-  }
-)
-
-export const fetchUpdateBoard = createAsyncThunk(
-  'boards/updateBoard',
-  async ({ id, params }: { id: string; params: IBoardUpdate }) => {
-    const res = await axios.put<IBoard>(`/boards/${id}`, params)
-    return res.data
-  }
-)
-
-export const fetchDeleteOneBoard = createAsyncThunk(
-  'boards/deleteOneBoard',
-  async (id: string) => {
-    const res = await axios.delete(`/boards/${id}`)
-    return res.data
-  }
-)
 
 const boardsSlice = createSlice({
   name: 'boards',
@@ -79,7 +38,6 @@ const boardsSlice = createSlice({
     // getAllBoards
     builder.addCase(fetchGetAllBoards.pending, (state) => {
       state.boards.status = Status.LOADING
-      // state.boards.items = []
     })
     builder.addCase(fetchGetAllBoards.fulfilled, (state, action) => {
       state.boards.status = Status.SUCCESS
@@ -116,9 +74,7 @@ const boardsSlice = createSlice({
     })
 
     // fetchGetOneBoard
-    builder.addCase(fetchGetOneBoard.pending, () => {
-      // state.board.status = Status.LOADING
-    })
+    builder.addCase(fetchGetOneBoard.pending, () => {})
     builder.addCase(fetchGetOneBoard.fulfilled, (state, action) => {
       state.board.status = Status.SUCCESS
       state.board.item = action.payload
@@ -129,12 +85,9 @@ const boardsSlice = createSlice({
     })
 
     // fetchUpdateBoard
-    builder.addCase(fetchUpdateBoard.pending, () => {
-      // state.board.status = Status.LOADING
-    })
+    builder.addCase(fetchUpdateBoard.pending, () => {})
     builder.addCase(fetchUpdateBoard.fulfilled, (state) => {
       state.board.status = Status.SUCCESS
-      // state.board.item = action.payload
     })
     builder.addCase(fetchUpdateBoard.rejected, (state) => {
       state.board.status = Status.ERROR
@@ -142,12 +95,9 @@ const boardsSlice = createSlice({
     })
 
     // fetchDeleteOneBoard
-    builder.addCase(fetchDeleteOneBoard.pending, () => {
-      // state.board.status = Status.LOADING
-    })
+    builder.addCase(fetchDeleteOneBoard.pending, () => {})
     builder.addCase(fetchDeleteOneBoard.fulfilled, (state) => {
       state.board.status = Status.SUCCESS
-      // state.board.item = action.payload
     })
     builder.addCase(fetchDeleteOneBoard.rejected, (state) => {
       state.board.status = Status.ERROR

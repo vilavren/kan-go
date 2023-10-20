@@ -21,11 +21,11 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { authActions } from '../../store/auth/auth.slice'
 import {
-  boardActions,
   fetchCreateBoard,
   fetchGetAllBoards,
   fetchUpdatePositionBoards,
-} from '../../store/boards/boards.slice'
+} from '../../store/boards/boards.asyncActions'
+import { boardActions } from '../../store/boards/boards.slice'
 import { AppDispatch, RootState } from '../../store/store'
 
 import { FavoritesBoards } from './FavoritesBoards'

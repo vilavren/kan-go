@@ -1,31 +1,18 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { Status } from '../../interfaces/status.enum'
-import axios from '../../utils/axios'
 import { IBoard } from '../boards/boards.types'
 
+import {
+  fetchGetFavorites,
+  fetchUpdateFavoritesPositionBoards,
+} from './favorite.asyncActions'
 import { IFavoritesState } from './favorite.types'
 
 const initialState: IFavoritesState = {
   items: [],
   status: Status.LOADING,
 }
-
-export const fetchGetFavorites = createAsyncThunk(
-  'boards/getFavorites',
-  async () => {
-    const res = await axios.get<IBoard[]>('/favorites')
-    return res.data
-  }
-)
-
-export const fetchUpdateFavoritesPositionBoards = createAsyncThunk(
-  'boards/updateFavoritesPositionBoards',
-  async (params: IBoard[]) => {
-    const res = await axios.put<IBoard[]>('/favorites', params)
-    return res.data
-  }
-)
 
 const favoritesSlice = createSlice({
   name: 'favorites',

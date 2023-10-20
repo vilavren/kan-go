@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, Outlet } from 'react-router-dom'
 
 import { Status } from '../../interfaces/status.enum'
-import { fetchIsAuth } from '../../store/auth/auth.slice'
+import { fetchIsAuth } from '../../store/auth/auth.asyncActions'
 import { AppDispatch, RootState } from '../../store/store'
 import { Loading } from '../common/Loading'
 

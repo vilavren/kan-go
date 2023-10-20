@@ -18,8 +18,8 @@ import {
   fetchCreateSection,
   fetchDeleteSection,
   fetchUpdateSection,
-  sectionsActions,
-} from '../../store/sections/sections.slice'
+} from '../../store/sections/sections.asyncActions'
+import { sectionsActions } from '../../store/sections/sections.slice'
 import { AppDispatch, RootState } from '../../store/store'
 
 let timerInput: NodeJS.Timeout

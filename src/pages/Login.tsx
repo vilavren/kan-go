@@ -5,7 +5,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { authActions, fetchLogin } from '../store/auth/auth.slice'
+import { fetchLogin } from '../store/auth/auth.asyncActions'
+import { authActions } from '../store/auth/auth.slice'
 import { ILogin } from '../store/auth/auth.types'
 import { AppDispatch, RootState } from '../store/store'
 

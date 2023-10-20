@@ -1,9 +1,13 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { Status } from '../../interfaces/status.enum'
-import axios from '../../utils/axios'
 
-import { ISection, ISectionUpdate, ISectionsState } from './sections.types'
+import {
+  fetchCreateSection,
+  fetchDeleteSection,
+  fetchUpdateSection,
+} from './sections.asyncActions'
+import { ISectionsState, ISection } from './sections.types'
 
 const initialState: ISectionsState = {
   section: {
@@ -15,41 +19,6 @@ const initialState: ISectionsState = {
     status: Status.SUCCESS,
   },
 }
-
-export const fetchCreateSection = createAsyncThunk(
-  'sections/createSection',
-  async (boardId: string) => {
-    const res = await axios.post<ISection>(`/boards/${boardId}/sections`)
-    return res.data
-  }
-)
-
-export const fetchDeleteSection = createAsyncThunk(
-  'sections/deleteSection',
-  async ({ boardId, sectionId }: { boardId: string; sectionId: string }) => {
-    const res = await axios.delete(`/boards/${boardId}/sections/${sectionId}`)
-    return res.data
-  }
-)
-
-export const fetchUpdateSection = createAsyncThunk(
-  'sections/updateSection',
-  async ({
-    boardId,
-    sectionId,
-    params,
-  }: {
-    boardId: string
-    sectionId: string
-    params: ISectionUpdate
-  }) => {
-    const res = await axios.put<ISection>(
-      `/boards/${boardId}/sections/${sectionId}`,
-      params
-    )
-    return res.data
-  }
-)
 
 const sectionsSlice = createSlice({
   name: 'sections',

@@ -6,7 +6,8 @@ import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { authActions, fetchRegister } from '../store/auth/auth.slice'
+import { fetchRegister } from '../store/auth/auth.asyncActions'
+import { authActions } from '../store/auth/auth.slice'
 import { IRegister } from '../store/auth/auth.types'
 import { AppDispatch, RootState } from '../store/store'
 

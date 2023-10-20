@@ -12,10 +12,10 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { boardActions } from '../../store/boards/boards.slice'
 import {
-  favoritesActions,
   fetchGetFavorites,
   fetchUpdateFavoritesPositionBoards,
-} from '../../store/favorite/favorite.slice'
+} from '../../store/favorite/favorite.asyncActions'
+import { favoritesActions } from '../../store/favorite/favorite.slice'
 import { AppDispatch, RootState } from '../../store/store'
 
 export const FavoritesBoards = (): JSX.Element => {

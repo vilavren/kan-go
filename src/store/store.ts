@@ -4,7 +4,7 @@ import { authReducer } from './auth/auth.slice'
 import { boardReducer } from './boards/boards.slice'
 import { favoritesReducer } from './favorite/favorite.slice'
 import { sectionsReducer } from './sections/sections.slice'
-import { saveState } from './storage'
+import { saveState } from './localStorage'
 
 export const store = configureStore({
   reducer: {
