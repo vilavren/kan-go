@@ -16,7 +16,12 @@ export interface ISection {
   title: string
   _id: string
   __v: number
-  tasks: any[]
+  tasks: ITask[]
+  id: string
+}
+
+export interface ITask {
+  title: string
   id: string
 }
 

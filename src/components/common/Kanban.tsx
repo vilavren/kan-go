@@ -3,13 +3,14 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import {
   Box,
   Button,
+  Card,
   Divider,
   IconButton,
   TextField,
   Typography,
 } from '@mui/material'
 import { ChangeEvent } from 'react'
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
@@ -73,6 +74,8 @@ export const Kanban = () => {
       }
     }, timeout)
   }
+
+  const createTask = () => {}
 
   return (
     <>
@@ -143,6 +146,7 @@ export const Kanban = () => {
                           color: 'gray',
                           '&:hover': { color: 'green' },
                         }}
+                        onClick={() => createTask()}
                       >
                         <AddCircleOutlineOutlinedIcon />
                       </IconButton>
@@ -157,6 +161,33 @@ export const Kanban = () => {
                         <DeleteOutlineIcon />
                       </IconButton>
                     </Box>
+                    {section.tasks.map((task, index) => (
+                      <Draggable
+                        key={task.id}
+                        draggableId={task.id}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <Card
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            sx={{
+                              padding: '10px',
+                              marginBottom: '10px',
+                              cursor: snapshot.isDragging
+                                ? 'grab'
+                                : 'pointer!important',
+                            }}
+                          >
+                            <Typography>
+                              {task.title === '' ? 'Без названия' : task.title}
+                            </Typography>
+                          </Card>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
                   </Box>
                 )}
               </Droppable>
