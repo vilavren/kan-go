@@ -48,15 +48,18 @@ export const fetchUpdatePositionTask = createAsyncThunk(
   'task/updatePositionTask',
   async ({
     boardId,
-    taskId,
     params,
   }: {
     boardId: string
-    taskId: string
-    params: string
+    params: {
+      resourceList: ITask[]
+      destinationList: ITask[]
+      resourceSectionId: string
+      destinationSectionId: string
+    }
   }) => {
     const { data } = await axios.put(
-      `/boards/${boardId}/tasks/${taskId}`,
+      `/boards/${boardId}/tasks/update-position`,
       params
     )
     return data

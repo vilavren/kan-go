@@ -10,7 +10,12 @@ import {
   Typography,
 } from '@mui/material'
 import { ChangeEvent } from 'react'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  OnDragEndResponder,
+} from 'react-beautiful-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
@@ -20,7 +25,10 @@ import {
   fetchUpdateSection,
 } from '../../store/sections/sections.asyncActions'
 import { sectionsActions } from '../../store/sections/sections.slice'
-import { fetchCreateTask } from '../../store/sections/tasks.asyncActions'
+import {
+  fetchCreateTask,
+  fetchUpdatePositionTask,
+} from '../../store/sections/tasks.asyncActions'
 import { AppDispatch, RootState } from '../../store/store'
 
 let timerInput: NodeJS.Timeout
@@ -31,7 +39,60 @@ export const Kanban = () => {
   const { sections } = useSelector((s: RootState) => s.sections)
   const { boardsId } = useParams<string>()
 
-  const onDragEnd = () => {}
+  const onDragEnd: OnDragEndResponder = async ({ source, destination }) => {
+    if (!destination) return
+
+    const tempSections = [...sections.items]
+
+    const sourceColIndex = tempSections.findIndex(
+      (e) => e.id === source.droppableId
+    )
+    const destinationColIndex = tempSections.findIndex(
+      (e) => e.id === destination.droppableId
+    )
+    const sourceCol = tempSections[sourceColIndex]
+    const destinationCol = tempSections[destinationColIndex]
+
+    const sourceSectionId = sourceCol.id
+    const destinationSectionId = destinationCol.id
+
+    const sourceTasks = [...sourceCol.tasks]
+    const destinationTasks = [...destinationCol.tasks]
+
+    if (source.droppableId !== destination.droppableId) {
+      const [removed] = sourceTasks.splice(source.index, 1)
+      destinationTasks.splice(destination.index, 0, removed)
+
+      tempSections[sourceColIndex] = {
+        ...tempSections[sourceColIndex],
+        tasks: sourceTasks,
+      }
+
+      tempSections[destinationColIndex] = {
+        ...tempSections[destinationColIndex],
+        tasks: destinationTasks,
+      }
+    } else {
+      const [removed] = destinationTasks.splice(source.index, 1)
+      destinationTasks.splice(destination.index, 0, removed)
+      tempSections[destinationColIndex].tasks = destinationTasks
+    }
+
+    dispatch(sectionsActions.setSections(tempSections))
+    if (boardsId) {
+      dispatch(
+        fetchUpdatePositionTask({
+          boardId: boardsId,
+          params: {
+            resourceList: sourceTasks,
+            destinationList: destinationTasks,
+            resourceSectionId: sourceSectionId,
+            destinationSectionId: destinationSectionId,
+          },
+        })
+      )
+    }
+  }
 
   const createSection = () => {
     if (boardsId) {
