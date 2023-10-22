@@ -10,8 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-basic-styles": "^40.0.0",
     "@ckeditor/ckeditor5-build-classic": "^39.0.2",
+    "@ckeditor/ckeditor5-editor-classic": "^40.0.0",
+    "@ckeditor/ckeditor5-essentials": "^40.0.0",
+    "@ckeditor/ckeditor5-paragraph": "^40.0.0",
     "@ckeditor/ckeditor5-react": "^6.1.0",
+    "@ckeditor/ckeditor5-theme-lark": "^40.0.0",
+    "@ckeditor/vite-plugin-ckeditor5": "^0.1.3",
     "@emoji-mart/data": "^1.1.2",
     "@emoji-mart/react": "^1.1.1",
     "@mui/icons-material": "^5.14.11",
@@ -33,6 +39,7 @@
     "react-router-dom": "^6.16.0"
   },
   "devDependencies": {
+    "@types/css-modules": "^1.0.4",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",

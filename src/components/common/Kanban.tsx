@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useState } from 'react'
 import {
   DragDropContext,
   Draggable,
@@ -25,11 +25,14 @@ import {
   fetchUpdateSection,
 } from '../../store/sections/sections.asyncActions'
 import { sectionsActions } from '../../store/sections/sections.slice'
+import { ITask } from '../../store/sections/sections.types'
 import {
   fetchCreateTask,
   fetchUpdatePositionTask,
 } from '../../store/sections/tasks.asyncActions'
 import { AppDispatch, RootState } from '../../store/store'
+
+import { ModalTask } from './ModalTask/ModalTask'
 
 let timerInput: NodeJS.Timeout
 const timeout: number = 500
@@ -37,6 +40,7 @@ const timeout: number = 500
 export const Kanban = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { sections } = useSelector((s: RootState) => s.sections)
+  const [selectTask, setSelectTask] = useState<ITask | undefined>(undefined)
   const { boardsId } = useParams<string>()
 
   const onDragEnd: OnDragEndResponder = async ({ source, destination }) => {
@@ -246,6 +250,7 @@ export const Kanban = () => {
                                 ? 'grab'
                                 : 'pointer!important',
                             }}
+                            onClick={() => setSelectTask(task)}
                           >
                             <Typography>
                               {task.title === '' ? 'Без названия' : task.title}
@@ -262,6 +267,11 @@ export const Kanban = () => {
           ))}
         </Box>
       </DragDropContext>
+      <ModalTask
+        selectTask={selectTask}
+        boardId={boardsId}
+        onClose={() => setSelectTask(undefined)}
+      />
     </>
   )
 }
