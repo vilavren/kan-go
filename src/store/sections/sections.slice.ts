@@ -7,7 +7,7 @@ import {
   fetchDeleteSection,
   fetchUpdateSection,
 } from './sections.asyncActions'
-import { ISectionsState, ISection } from './sections.types'
+import { ISectionsState, ISection, ITask } from './sections.types'
 import {
   fetchCreateTask,
   fetchDeleteTask,
@@ -35,6 +35,26 @@ const sectionsSlice = createSlice({
     },
     setSections: (state, action: PayloadAction<ISection[]>) => {
       state.sections.items = action.payload
+    },
+
+    updateTask: (state, action: PayloadAction<ITask>) => {
+      const sectionIndex = state.sections.items.findIndex(
+        (e) => e.id === action.payload.section.id
+      )
+      const taskIndex = state.sections.items[sectionIndex].tasks.findIndex(
+        (e) => e.id === action.payload.id
+      )
+      state.sections.items[sectionIndex].tasks[taskIndex] = action.payload
+    },
+
+    deleteTask: (state, action: PayloadAction<ITask>) => {
+      const sectionIndex = state.sections.items.findIndex(
+        (e) => e.id === action.payload.section.id
+      )
+      const taskIndex = state.sections.items[sectionIndex].tasks.findIndex(
+        (e) => e.id === action.payload.id
+      )
+      state.sections.items[sectionIndex].tasks.splice(taskIndex, 1)
     },
   },
   extraReducers(builder) {

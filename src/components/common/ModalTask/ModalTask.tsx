@@ -2,6 +2,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import '@ckeditor/ckeditor5-build-classic/build/translations/ru'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 import {
   Box,
   Divider,
@@ -12,8 +13,12 @@ import {
   Typography,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
+import { sectionsActions } from '../../../store/sections/sections.slice'
 import { ITask } from '../../../store/sections/sections.types'
+import { fetchDeleteTask } from '../../../store/sections/tasks.asyncActions'
+import { AppDispatch } from '../../../store/store'
 
 const stylesModal = {
   outline: 'none',
@@ -21,23 +26,24 @@ const stylesModal = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '50%',
+  width: '85%',
   bgcolor: 'background.paper',
   border: '0px solid #000',
   boxShadow: 24,
   p: 1,
-  height: '80%',
+  height: '95%',
 }
 
 export const ModalTask = ({
   selectTask,
   boardId,
-  onClose,
+  onCloseTask,
 }: {
   selectTask: ITask | undefined
   boardId: string | undefined
-  onClose: () => void
+  onCloseTask: () => void
 }) => {
+  const dispatch = useDispatch<AppDispatch>()
   const [task, setTask] = useState<ITask | undefined>(selectTask)
   const [title, setTitle] = useState<string>('')
   const [content, setContent] = useState<string>('')
@@ -48,20 +54,43 @@ export const ModalTask = ({
     setContent(selectTask !== undefined ? selectTask.content : '')
   }, [selectTask])
 
+  const onClose = () => {
+    onCloseTask()
+    if (task) {
+      dispatch(sectionsActions.updateTask(task))
+    }
+  }
+
+  const deleteTask = () => {
+    if (boardId && task) {
+      dispatch(sectionsActions.deleteTask(task))
+      dispatch(
+        fetchDeleteTask({
+          boardId: boardId,
+          taskId: task.id,
+        })
+      )
+      setTask(undefined)
+    }
+  }
+
   return (
-    <Modal open={task !== undefined} closeAfterTransition>
+    <Modal open={task !== undefined} onClose={onClose} closeAfterTransition>
       <Fade in={task !== undefined}>
         <Box sx={stylesModal}>
           <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'flex-end',
+              justifyContent: 'space-between',
               width: '100%',
             }}
           >
-            <IconButton color="error" onClick={onClose}>
+            <IconButton color="error" onClick={deleteTask}>
               <DeleteOutlineIcon />
+            </IconButton>
+            <IconButton onClick={onClose}>
+              <HighlightOffOutlinedIcon />
             </IconButton>
           </Box>
           <Box
@@ -69,7 +98,7 @@ export const ModalTask = ({
               display: 'flex',
               width: '100%',
               flexDirection: 'column',
-              padding: '2rem 5rem 5rem',
+              padding: '1rem 2rem 2rem',
             }}
           >
             <TextField
@@ -90,7 +119,7 @@ export const ModalTask = ({
               }}
             />
             <Typography variant="body2" fontWeight="700">
-              {task?._id}
+              {/* Дата  */}
             </Typography>
             <Divider sx={{ margin: '1.5rem 0' }} />
             <Box

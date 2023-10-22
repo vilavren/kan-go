@@ -270,7 +270,7 @@ export const Kanban = () => {
       <ModalTask
         selectTask={selectTask}
         boardId={boardsId}
-        onClose={() => setSelectTask(undefined)}
+        onCloseTask={() => setSelectTask(undefined)}
       />
     </>
   )
