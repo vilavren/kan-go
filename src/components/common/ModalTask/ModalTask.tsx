@@ -12,12 +12,15 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { sectionsActions } from '../../../store/sections/sections.slice'
 import { ITask } from '../../../store/sections/sections.types'
-import { fetchDeleteTask } from '../../../store/sections/tasks.asyncActions'
+import {
+  fetchDeleteTask,
+  fetchUpdateTask,
+} from '../../../store/sections/tasks.asyncActions'
 import { AppDispatch } from '../../../store/store'
 
 const stylesModal = {
@@ -26,13 +29,16 @@ const stylesModal = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '85%',
+  width: '50%',
   bgcolor: 'background.paper',
   border: '0px solid #000',
   boxShadow: 24,
   p: 1,
   height: '95%',
 }
+
+let timerInput: NodeJS.Timeout
+const timeout: number = 500
 
 export const ModalTask = ({
   selectTask,
@@ -56,9 +62,6 @@ export const ModalTask = ({
 
   const onClose = () => {
     onCloseTask()
-    if (task) {
-      dispatch(sectionsActions.updateTask(task))
-    }
   }
 
   const deleteTask = () => {
@@ -71,6 +74,27 @@ export const ModalTask = ({
         })
       )
       setTask(undefined)
+    }
+  }
+
+  const updateTitle = async (e: ChangeEvent<HTMLInputElement>) => {
+    clearTimeout(timerInput)
+    if (boardId && task) {
+      const newTitle = e.target.value
+      const tempTask = { ...task, title: newTitle }
+
+      setTitle(newTitle)
+      dispatch(sectionsActions.updateTask(tempTask))
+
+      timerInput = setTimeout(async () => {
+        await dispatch(
+          fetchUpdateTask({
+            boardId: boardId,
+            taskId: task?.id,
+            params: { title: newTitle },
+          })
+        )
+      }, timeout)
     }
   }
 
@@ -103,7 +127,7 @@ export const ModalTask = ({
           >
             <TextField
               value={title}
-              // onChange={updateTitle}
+              onChange={updateTitle}
               placeholder="Без названия..."
               variant="outlined"
               fullWidth

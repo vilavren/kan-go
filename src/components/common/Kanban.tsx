@@ -79,7 +79,11 @@ export const Kanban = () => {
     } else {
       const [removed] = destinationTasks.splice(source.index, 1)
       destinationTasks.splice(destination.index, 0, removed)
-      tempSections[destinationColIndex].tasks = destinationTasks
+
+      tempSections[destinationColIndex] = {
+        ...tempSections[destinationColIndex],
+        tasks: destinationTasks,
+      }
     }
 
     dispatch(sectionsActions.setSections(tempSections))
