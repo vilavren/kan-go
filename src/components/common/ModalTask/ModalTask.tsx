@@ -1,6 +1,7 @@
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import '@ckeditor/ckeditor5-build-classic/build/translations/ru'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
+import { EventInfo } from '@ckeditor/ckeditor5-utils'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 import {
@@ -22,6 +23,7 @@ import {
   fetchUpdateTask,
 } from '../../../store/sections/tasks.asyncActions'
 import { AppDispatch } from '../../../store/store'
+import './ModalTask.css'
 
 const stylesModal = {
   outline: 'none',
@@ -29,16 +31,17 @@ const stylesModal = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '50%',
+  width: '80%',
   bgcolor: 'background.paper',
   border: '0px solid #000',
   boxShadow: 24,
   p: 1,
-  height: '95%',
+  height: '90%',
 }
 
 let timerInput: NodeJS.Timeout
 const timeout: number = 500
+let isModalOpen: boolean = false
 
 export const ModalTask = ({
   selectTask,
@@ -58,9 +61,13 @@ export const ModalTask = ({
     setTask(selectTask)
     setTitle(selectTask !== undefined ? selectTask.title : '')
     setContent(selectTask !== undefined ? selectTask.content : '')
+    if (selectTask !== undefined) {
+      isModalOpen = true
+    }
   }, [selectTask])
 
   const onClose = () => {
+    isModalOpen = false
     onCloseTask()
   }
 
@@ -77,7 +84,7 @@ export const ModalTask = ({
     }
   }
 
-  const updateTitle = async (e: ChangeEvent<HTMLInputElement>) => {
+  const updateTitle = (e: ChangeEvent<HTMLInputElement>) => {
     clearTimeout(timerInput)
     if (boardId && task) {
       const newTitle = e.target.value
@@ -86,12 +93,37 @@ export const ModalTask = ({
       setTitle(newTitle)
       dispatch(sectionsActions.updateTask(tempTask))
 
-      timerInput = setTimeout(async () => {
-        await dispatch(
+      timerInput = setTimeout(() => {
+        dispatch(
           fetchUpdateTask({
             boardId: boardId,
             taskId: task?.id,
             params: { title: newTitle },
+          })
+        )
+      }, timeout)
+    }
+  }
+
+  const updateContent = (
+    e: EventInfo<string, unknown>,
+    editor: ClassicEditor
+  ) => {
+    clearTimeout(timerInput)
+    const data: string = editor.getData()
+
+    if (isModalOpen && boardId && task) {
+      const tempTask = { ...task, content: data }
+
+      setContent(data)
+      dispatch(sectionsActions.updateTask(tempTask))
+
+      timerInput = setTimeout(() => {
+        dispatch(
+          fetchUpdateTask({
+            boardId: boardId,
+            taskId: task?.id,
+            params: { content: data },
           })
         )
       }, timeout)
@@ -158,6 +190,7 @@ export const ModalTask = ({
                 config={{ language: 'ru' }}
                 editor={ClassicEditor}
                 data={content}
+                onChange={updateContent}
               />
             </Box>
           </Box>

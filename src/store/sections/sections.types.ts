@@ -54,5 +54,6 @@ export interface ITaskSection {
 }
 
 export interface ITaskUpdate {
-  title: string
+  title?: string
+  content?: string
 }
