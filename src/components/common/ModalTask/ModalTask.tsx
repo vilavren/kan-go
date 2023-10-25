@@ -43,7 +43,7 @@ let timerInput: NodeJS.Timeout
 const timeout: number = 500
 let isModalOpen: boolean = false
 
-export const ModalTask = ({
+const ModalTask = ({
   selectTask,
   boardId,
   onCloseTask,
@@ -199,3 +199,5 @@ export const ModalTask = ({
     </Modal>
   )
 }
+
+export default ModalTask

@@ -10,7 +10,7 @@ import { authActions } from '../store/auth/auth.slice'
 import { ILogin } from '../store/auth/auth.types'
 import { AppDispatch, RootState } from '../store/store'
 
-export const Login = () => {
+const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const { jwt, loginErrorMessage } = useSelector(
@@ -102,3 +102,5 @@ export const Login = () => {
     </>
   )
 }
+
+export default Login

@@ -1,15 +1,17 @@
 import './App.css'
 import { CssBaseline } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { lazy } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { AppLayout } from './components/layout/AppLayout'
 import { AuthLayout } from './components/layout/AuthLayout'
-import { Board } from './pages/Board'
 import { Home } from './pages/Home'
-import { Login } from './pages/Login'
-import { Signup } from './pages/Signup'
+
+const Board = lazy(() => import('./pages/Board'))
+const Login = lazy(() => import('./pages/Login'))
+const Signup = lazy(() => import('./pages/Signup'))
 
 function App() {
   const theme = createTheme({

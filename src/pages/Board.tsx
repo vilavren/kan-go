@@ -2,12 +2,11 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import StarIcon from '@mui/icons-material/Star'
 import StarOutlineOutlinedIcon from '@mui/icons-material/StarOutlineOutlined'
 import { Box, IconButton, TextField } from '@mui/material'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, lazy, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { EmojiPicker } from '../components/common/EmojiPicker'
-import { Kanban } from '../components/common/Kanban'
 import { Loading } from '../components/common/Loading'
 import { Status } from '../interfaces/status.enum'
 import {
@@ -20,10 +19,12 @@ import { favoritesActions } from '../store/favorite/favorite.slice'
 import { sectionsActions } from '../store/sections/sections.slice'
 import { AppDispatch, RootState } from '../store/store'
 
+const Kanban = lazy(() => import('../components/common/Kanban'))
+
 let timerInput: NodeJS.Timeout
 const timeout: number = 500
 
-export const Board = () => {
+const Board = () => {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const [title, setTitle] = useState<string>('')
@@ -237,3 +238,5 @@ export const Board = () => {
     </>
   )
 }
+
+export default Board

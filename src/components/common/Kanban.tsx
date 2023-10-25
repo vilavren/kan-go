@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, lazy, useState } from 'react'
 import {
   DragDropContext,
   Draggable,
@@ -32,12 +32,12 @@ import {
 } from '../../store/sections/tasks.asyncActions'
 import { AppDispatch, RootState } from '../../store/store'
 
-import { ModalTask } from './ModalTask/ModalTask'
+const ModalTask = lazy(() => import('./ModalTask/ModalTask'))
 
 let timerInput: NodeJS.Timeout
 const timeout: number = 500
 
-export const Kanban = () => {
+const Kanban = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { sections } = useSelector((s: RootState) => s.sections)
   const [selectTask, setSelectTask] = useState<ITask | undefined>(undefined)
@@ -279,3 +279,5 @@ export const Kanban = () => {
     </>
   )
 }
+
+export default Kanban
