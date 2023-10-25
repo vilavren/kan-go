@@ -106,7 +106,7 @@ export const ModalTask = ({
   }
 
   const updateContent = (
-    e: EventInfo<string, unknown>,
+    _e: EventInfo<string, unknown>,
     editor: ClassicEditor
   ) => {
     clearTimeout(timerInput)
