@@ -23,7 +23,7 @@ import { AppDispatch, RootState } from '../store/store'
 let timerInput: NodeJS.Timeout
 const timeout: number = 500
 
-const Board = () => {
+export const Board = () => {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const [title, setTitle] = useState<string>('')
@@ -237,5 +237,3 @@ const Board = () => {
     </>
   )
 }
-
-export default Board
