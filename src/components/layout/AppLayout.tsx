@@ -7,7 +7,7 @@ import { Status } from '../../interfaces/status.enum'
 import { fetchIsAuth } from '../../store/auth/auth.asyncActions'
 import { AppDispatch, RootState } from '../../store/store'
 import { Loading } from '../common/Loading'
-import { Sidebar } from '../common/Sidebar'
+import Sidebar from '../common/Sidebar'
 
 export const AppLayout = () => {
   const dispatch = useDispatch<AppDispatch>()

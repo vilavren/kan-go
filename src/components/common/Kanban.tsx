@@ -37,7 +37,7 @@ const ModalTask = lazy(() => import('./ModalTask/ModalTask'))
 let timerInput: NodeJS.Timeout
 const timeout: number = 500
 
-const Kanban = () => {
+export const Kanban = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { sections } = useSelector((s: RootState) => s.sections)
   const [selectTask, setSelectTask] = useState<ITask | undefined>(undefined)
@@ -279,5 +279,3 @@ const Kanban = () => {
     </>
   )
 }
-
-export default Kanban

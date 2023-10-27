@@ -14,3 +14,4 @@ Kanban-доска - это инструмент для управления пр
 - Axios + Fetch
 - MUI Components
 - React Beautiful DnD
+- Progressive Web Applications (PWA)

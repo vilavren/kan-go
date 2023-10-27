@@ -30,7 +30,7 @@ import { AppDispatch, RootState } from '../../store/store'
 
 import { FavoritesBoards } from './FavoritesBoards'
 
-export const Sidebar = () => {
+const Sidebar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const { data } = useSelector((s: RootState) => s.auth)
@@ -182,3 +182,5 @@ export const Sidebar = () => {
     </Drawer>
   )
 }
+
+export default Sidebar

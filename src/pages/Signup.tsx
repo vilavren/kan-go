@@ -11,7 +11,7 @@ import { authActions } from '../store/auth/auth.slice'
 import { IRegister } from '../store/auth/auth.types'
 import { AppDispatch, RootState } from '../store/store'
 
-const Signup = () => {
+export const Signup = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const { jwt, registerErrorMessage } = useSelector(
@@ -108,5 +108,3 @@ const Signup = () => {
     </>
   )
 }
-
-export default Signup
