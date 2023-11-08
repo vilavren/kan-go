@@ -6,6 +6,12 @@ import { VitePWA } from 'vite-plugin-pwa'
 export default defineConfig({
   plugins: [
     react(),
-    VitePWA({ registerType: 'autoUpdate', devOptions: { enabled: true } }),
+    VitePWA({
+      registerType: 'autoUpdate',
+      devOptions: { enabled: true },
+      workbox: {
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+      },
+    }),
   ],
 })
