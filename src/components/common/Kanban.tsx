@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { ChangeEvent, lazy, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import {
   DragDropContext,
   Draggable,
@@ -32,7 +32,7 @@ import {
 } from '../../store/sections/tasks.asyncActions'
 import { AppDispatch, RootState } from '../../store/store'
 
-const ModalTask = lazy(() => import('./ModalTask/ModalTask'))
+import ModalTask from './ModalTask/ModalTask'
 
 let timerInput: NodeJS.Timeout
 const timeout: number = 500
