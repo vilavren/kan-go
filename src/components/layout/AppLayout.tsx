@@ -1,4 +1,3 @@
-import { Box } from '@mui/material'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, Outlet } from 'react-router-dom'
@@ -7,7 +6,8 @@ import { Status } from '../../interfaces/status.enum'
 import { fetchIsAuth } from '../../store/auth/auth.asyncActions'
 import { AppDispatch, RootState } from '../../store/store'
 import { Loading } from '../common/Loading'
-import { Sidebar } from '../common/Sidebar'
+
+import { MainLayout } from './MainLayout'
 
 export const AppLayout = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -24,25 +24,10 @@ export const AppLayout = () => {
     return <Navigate to="/login" replace />
   }
   return (
-    <div>
-      {
-        <Box
-          sx={{
-            display: 'flex',
-          }}
-        >
-          <Sidebar />
-          <Box
-            sx={{
-              flexGrow: 1,
-              p: 1,
-              width: 'max-content',
-            }}
-          >
-            <Outlet />
-          </Box>
-        </Box>
-      }
-    </div>
+    <>
+      <MainLayout>
+        <Outlet />
+      </MainLayout>
+    </>
   )
 }
