@@ -1,10 +1,7 @@
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import StarIcon from '@mui/icons-material/Star'
-import StarOutlineOutlinedIcon from '@mui/icons-material/StarOutlineOutlined'
-import { Box, IconButton, TextField } from '@mui/material'
+import { Box, TextField } from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { EmojiPicker } from '../components/common/EmojiPicker'
 import { Kanban } from '../components/common/Kanban'
@@ -13,7 +10,6 @@ import { Status } from '../interfaces/status.enum'
 import {
   fetchGetOneBoard,
   fetchUpdateBoard,
-  fetchDeleteOneBoard,
 } from '../store/boards/boards.asyncActions'
 import { boardActions } from '../store/boards/boards.slice'
 import { favoritesActions } from '../store/favorite/favorite.slice'
@@ -25,13 +21,11 @@ const timeout: number = 500
 
 export const Board = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const navigate = useNavigate()
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
   const [isFavorite, setIsFavorite] = useState<boolean>(false)
   const [icon, setIcon] = useState<string>('')
-  const { board, boards } = useSelector((s: RootState) => s.boards)
-  const favoritesItem = useSelector((s: RootState) => s.favorites.items)
+  const { board } = useSelector((s: RootState) => s.boards)
   const { boardsId: boardId } = useParams<string>()
 
   useEffect(() => {
@@ -123,54 +117,6 @@ export const Board = () => {
     }, timeout)
   }
 
-  const addFavorite = async () => {
-    try {
-      if (boardId) {
-        dispatch(
-          fetchUpdateBoard({
-            id: boardId,
-            params: {
-              favorite: !isFavorite,
-            },
-          })
-        )
-        setIsFavorite(!isFavorite)
-      }
-
-      let tempFavorites = [...favoritesItem]
-      if (isFavorite) {
-        tempFavorites = tempFavorites.filter((e) => e.id !== boardId)
-      } else {
-        if (board.item) {
-          tempFavorites.push(board.item)
-          dispatch(favoritesActions.setFavoritesBoards(tempFavorites))
-        }
-      }
-    } catch (error) {
-      alert(error)
-    }
-  }
-
-  const deleteBoard = async () => {
-    if (boardId) {
-      dispatch(fetchDeleteOneBoard(boardId))
-    }
-    if (isFavorite) {
-      const tempFavorites = favoritesItem.filter((e) => e.id !== boardId)
-      dispatch(favoritesActions.setFavoritesBoards(tempFavorites))
-    }
-
-    const tempBoards = boards.items.filter((e) => e.id !== boardId)
-    if (tempBoards.length <= 0) {
-      dispatch(boardActions.setActiveBoard(undefined))
-      dispatch(sectionsActions.setSections([]))
-      navigate('/boards')
-    } else {
-      navigate(`/boards/${tempBoards[0].id}`)
-    }
-    dispatch(boardActions.setBoards(tempBoards))
-  }
-
   return (
     <>
       {board.status === Status.LOADING ? (
@@ -179,26 +125,7 @@ export const Board = () => {
         <>
           <Box
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: '100%',
-            }}
-          >
-            <IconButton onClick={addFavorite}>
-              {isFavorite ? (
-                <StarIcon color="warning" />
-              ) : (
-                <StarOutlineOutlinedIcon />
-              )}
-            </IconButton>
-            <IconButton onClick={deleteBoard}>
-              <DeleteOutlineIcon color="error" />
-            </IconButton>
-          </Box>
-          <Box
-            sx={{
-              padding: '20px 20px',
+              padding: '50px 0',
             }}
           >
             <Box>

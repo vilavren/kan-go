@@ -18,6 +18,12 @@ const favoritesSlice = createSlice({
   name: 'favorites',
   initialState,
   reducers: {
+    addFavorite: (state, action: PayloadAction<IBoard>) => {
+      state.items = [...state.items, action.payload]
+    },
+    removeFavorite: (state, action: PayloadAction<{ boardId: string }>) => {
+      state.items = state.items.filter((e) => e.id !== action.payload.boardId)
+    },
     updateBoard: (
       state,
       action: PayloadAction<{

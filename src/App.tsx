@@ -39,7 +39,11 @@ function App() {
   return (
     <div>
       <Helmet>
-        <meta name="theme-color" content={theme.palette.background.default} />
+        <meta
+          name="theme-color"
+          content="#202020"
+          // content={theme.palette.background.default}
+        />
       </Helmet>
 
       <ThemeProvider theme={theme}>

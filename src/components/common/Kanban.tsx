@@ -173,7 +173,7 @@ export const Kanban = () => {
           sx={{
             display: 'flex',
             alignItems: 'flex-start',
-            width: 'calc(100vw - 400px)',
+            width: 'calc(100vw - 50px)',
             overflowX: 'auto',
           }}
         >
@@ -196,6 +196,9 @@ export const Kanban = () => {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         marginBottom: '10px',
+                        padding: '5px 10px',
+                        borderRadius: '4px',
+                        backgroundColor: '#333333',
                       }}
                     >
                       <TextField
@@ -248,8 +251,8 @@ export const Kanban = () => {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             sx={{
-                              padding: '10px',
                               marginBottom: '10px',
+                              padding: '10px',
                               cursor: snapshot.isDragging
                                 ? 'grab'
                                 : 'pointer!important',

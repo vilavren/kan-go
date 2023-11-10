@@ -34,8 +34,6 @@ export const NewSidebar = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0)
   const { boardsId } = useParams<string>()
 
-  const sidebarWidth = 250
-
   useEffect(() => {
     dispatch(fetchGetAllBoards())
   }, [])
@@ -72,9 +70,8 @@ export const NewSidebar = () => {
     <List
       disablePadding
       sx={{
-        width: sidebarWidth,
         height: '100vh',
-        backgroundColor: '#292929',
+        backgroundColor: '#191919',
       }}
     >
       <Box sx={{ paddingTop: '10px' }}></Box>
