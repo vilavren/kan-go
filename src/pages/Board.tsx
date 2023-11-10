@@ -32,13 +32,13 @@ export const Board = () => {
   const [icon, setIcon] = useState<string>('')
   const { board, boards } = useSelector((s: RootState) => s.boards)
   const favoritesItem = useSelector((s: RootState) => s.favorites.items)
-  const { boardsId } = useParams<string>()
+  const { boardsId: boardId } = useParams<string>()
 
   useEffect(() => {
-    if (boardsId) {
-      dispatch(fetchGetOneBoard(boardsId))
+    if (boardId) {
+      dispatch(fetchGetOneBoard(boardId))
     }
-  }, [boardsId, dispatch])
+  }, [boardId, dispatch])
 
   useEffect(() => {
     if (board.item?.sections) {
@@ -55,29 +55,37 @@ export const Board = () => {
     }
   }, [board.item])
 
-  const updateBoard = (fieldName: string, fieldValue: string) => {
-    const temp = [...boards.items]
-    const index = temp.findIndex((e) => e.id === boardsId)
-    temp[index] = { ...temp[index], [fieldName]: fieldValue }
-
-    if (isFavorite) {
-      const tempFavorites = [...favoritesItem]
-      const favoriteIndex = tempFavorites.findIndex((e) => e.id === boardsId)
-      tempFavorites[favoriteIndex] = {
-        ...tempFavorites[favoriteIndex],
-        [fieldName]: fieldValue,
+  const updateBoard = (
+    boardId: string | undefined,
+    fieldName: string,
+    fieldValue: string
+  ) => {
+    if (boardId) {
+      if (isFavorite) {
+        dispatch(
+          favoritesActions.updateBoard({
+            boardId,
+            fieldName,
+            fieldValue,
+          })
+        )
       }
-      dispatch(favoritesActions.setFavoritesBoards(tempFavorites))
+      dispatch(
+        boardActions.updateBoard({
+          boardId,
+          fieldName,
+          fieldValue,
+        })
+      )
     }
-
-    dispatch(boardActions.setBoards(temp))
   }
 
   const onIconChange = async (newIcon: string) => {
     setIcon(newIcon)
-    updateBoard('icon', newIcon)
-    if (boardsId) {
-      dispatch(fetchUpdateBoard({ id: boardsId, params: { icon: newIcon } }))
+    updateBoard(boardId, 'icon', newIcon)
+
+    if (boardId) {
+      dispatch(fetchUpdateBoard({ id: boardId, params: { icon: newIcon } }))
     }
   }
 
@@ -86,8 +94,8 @@ export const Board = () => {
     description?: string
   }) => {
     try {
-      if (boardsId) {
-        dispatch(fetchUpdateBoard({ id: boardsId, params }))
+      if (boardId) {
+        dispatch(fetchUpdateBoard({ id: boardId, params }))
       }
     } catch (error) {
       alert(error)
@@ -98,7 +106,7 @@ export const Board = () => {
     clearTimeout(timerInput)
     const newTitle = e.target.value
     setTitle(newTitle)
-    updateBoard('title', newTitle)
+    updateBoard(boardId, 'title', newTitle)
 
     timerInput = setTimeout(async () => {
       await timerFetchUpdateBoard({ title: newTitle })
@@ -117,10 +125,10 @@ export const Board = () => {
 
   const addFavorite = async () => {
     try {
-      if (boardsId) {
+      if (boardId) {
         dispatch(
           fetchUpdateBoard({
-            id: boardsId,
+            id: boardId,
             params: {
               favorite: !isFavorite,
             },
@@ -131,7 +139,7 @@ export const Board = () => {
 
       let tempFavorites = [...favoritesItem]
       if (isFavorite) {
-        tempFavorites = tempFavorites.filter((e) => e.id !== boardsId)
+        tempFavorites = tempFavorites.filter((e) => e.id !== boardId)
       } else {
         if (board.item) {
           tempFavorites.push(board.item)
@@ -144,15 +152,15 @@ export const Board = () => {
   }
 
   const deleteBoard = async () => {
-    if (boardsId) {
-      dispatch(fetchDeleteOneBoard(boardsId))
+    if (boardId) {
+      dispatch(fetchDeleteOneBoard(boardId))
     }
     if (isFavorite) {
-      const tempFavorites = favoritesItem.filter((e) => e.id !== boardsId)
+      const tempFavorites = favoritesItem.filter((e) => e.id !== boardId)
       dispatch(favoritesActions.setFavoritesBoards(tempFavorites))
     }
 
-    const tempBoards = boards.items.filter((e) => e.id !== boardsId)
+    const tempBoards = boards.items.filter((e) => e.id !== boardId)
     if (tempBoards.length <= 0) {
       dispatch(boardActions.setActiveBoard(undefined))
       dispatch(sectionsActions.setSections([]))
@@ -184,7 +192,6 @@ export const Board = () => {
                 <StarOutlineOutlinedIcon />
               )}
             </IconButton>
-
             <IconButton onClick={deleteBoard}>
               <DeleteOutlineIcon color="error" />
             </IconButton>

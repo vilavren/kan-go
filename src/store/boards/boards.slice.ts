@@ -27,6 +27,22 @@ const boardsSlice = createSlice({
   name: 'boards',
   initialState,
   reducers: {
+    updateBoard: (
+      state,
+      action: PayloadAction<{
+        boardId: string
+        fieldName: string
+        fieldValue: string
+      }>
+    ) => {
+      const index = state.boards.items.findIndex(
+        (e) => e.id === action.payload.boardId
+      )
+      state.boards.items[index] = {
+        ...state.boards.items[index],
+        [action.payload.fieldName]: action.payload.fieldValue,
+      }
+    },
     setActiveBoard: (state, action: PayloadAction<IBoard | undefined>) => {
       state.board.item = action.payload
     },
