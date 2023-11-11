@@ -1,4 +1,4 @@
-// import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
 import MenuIcon from '@mui/icons-material/Menu'
 import StarIcon from '@mui/icons-material/Star'
@@ -13,17 +13,22 @@ import {
   Drawer,
 } from '@mui/material'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
-import { FC, PropsWithChildren, useState } from 'react'
+import { FC, PropsWithChildren, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { authActions } from '../../store/auth/auth.slice'
-import { fetchUpdateBoard } from '../../store/boards/boards.asyncActions'
+import {
+  fetchDeleteOneBoard,
+  fetchUpdateBoard,
+} from '../../store/boards/boards.asyncActions'
+import { boardActions } from '../../store/boards/boards.slice'
 import { favoritesActions } from '../../store/favorite/favorite.slice'
+import { sectionsActions } from '../../store/sections/sections.slice'
 import { AppDispatch, RootState } from '../../store/store'
 import { NewSidebar } from '../common/NewSidebar'
 
-const drawerWidth = 350
+const drawerWidth = 300
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean
@@ -80,12 +85,18 @@ export const MainLayout: FC<PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const { data } = useSelector((s: RootState) => s.auth)
-  const { board } = useSelector((s: RootState) => s.boards)
+  const { board, boards } = useSelector((s: RootState) => s.boards)
 
   const [isFavorite, setIsFavorite] = useState<boolean>(false)
   const [openDrawer, setOpenDrawer] = useState(false)
 
   const { boardsId: boardId } = useParams<string>()
+
+  useEffect(() => {
+    if (board.item) {
+      setIsFavorite(board.item.favorite)
+    }
+  }, [board.item])
 
   const handleDrawerOpen = () => {
     setOpenDrawer(true)
@@ -125,25 +136,23 @@ export const MainLayout: FC<PropsWithChildren> = ({ children }) => {
     }
   }
 
-  // const deleteBoard = async () => {
-  //   if (boardId) {
-  //     dispatch(fetchDeleteOneBoard(boardId))
-  //   }
-  //   if (isFavorite) {
-  //     const tempFavorites = favoritesItem.filter((e) => e.id !== boardId)
-  //     dispatch(favoritesActions.setFavoritesBoards(tempFavorites))
-  //   }
+  const deleteBoard = async () => {
+    if (boardId) {
+      dispatch(fetchDeleteOneBoard(boardId))
+      dispatch(boardActions.removeBoard({ boardId }))
+      dispatch(sectionsActions.setSections([]))
+      if (isFavorite) {
+        dispatch(favoritesActions.removeFavorite({ boardId }))
+      }
+    }
 
-  //   const tempBoards = boards.items.filter((e) => e.id !== boardId)
-  //   if (tempBoards.length <= 0) {
-  //     dispatch(boardActions.setActiveBoard(undefined))
-  //     dispatch(sectionsActions.setSections([]))
-  //     navigate('/boards')
-  //   } else {
-  //     navigate(`/boards/${tempBoards[0].id}`)
-  //   }
-  //   dispatch(boardActions.setBoards(tempBoards))
-  // }
+    if (boards.items.length <= 0) {
+      dispatch(boardActions.setActiveBoard(undefined))
+      navigate('/boards')
+    } else {
+      navigate(`/boards/${boards.items[1].id}`)
+    }
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -168,11 +177,11 @@ export const MainLayout: FC<PropsWithChildren> = ({ children }) => {
             variant="body1"
             noWrap
             component="h2"
-            sx={{ flexGrow: 1 }}
+            sx={{ flexGrow: 1, ...(openDrawer && { display: 'none' }) }}
           >
             {board.item?.title}
           </Typography>
-          <Box sx={{ ...(openDrawer && { display: 'none' }) }}>
+          <Box sx={{ display: 'flex' }}>
             <IconButton onClick={addFavorite}>
               {isFavorite ? (
                 <StarIcon color="warning" />
@@ -180,9 +189,12 @@ export const MainLayout: FC<PropsWithChildren> = ({ children }) => {
                 <StarOutlineOutlinedIcon />
               )}
             </IconButton>
-            {/* <IconButton onClick={deleteBoard}>
+            <IconButton
+              onClick={deleteBoard}
+              // sx={{ ...(openDrawer && { display: 'none' }) }}
+            >
               <DeleteOutlineIcon color="error" />
-            </IconButton> */}
+            </IconButton>
           </Box>
         </Toolbar>
       </AppBar>

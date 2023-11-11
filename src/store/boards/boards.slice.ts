@@ -43,6 +43,11 @@ const boardsSlice = createSlice({
         [action.payload.fieldName]: action.payload.fieldValue,
       }
     },
+    removeBoard: (state, action: PayloadAction<{ boardId: string }>) => {
+      state.boards.items = state.boards.items.filter(
+        (e) => e.id !== action.payload.boardId
+      )
+    },
     setActiveBoard: (state, action: PayloadAction<IBoard | undefined>) => {
       state.board.item = action.payload
     },
