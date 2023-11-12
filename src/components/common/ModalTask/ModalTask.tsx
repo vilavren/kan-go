@@ -31,12 +31,12 @@ const stylesModal = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '80%',
+  width: '95%',
   bgcolor: 'background.paper',
   border: '0px solid #000',
   boxShadow: 24,
   p: 1,
-  height: '90%',
+  height: '95%',
 }
 
 let timerInput: NodeJS.Timeout
@@ -154,7 +154,7 @@ const ModalTask = ({
               display: 'flex',
               width: '100%',
               flexDirection: 'column',
-              padding: '1rem 2rem 2rem',
+              padding: '1rem',
             }}
           >
             <TextField
@@ -168,7 +168,7 @@ const ModalTask = ({
                 '& .MuiOutlinedInput-input': { padding: 0 },
                 '& .MuiOutlinedInput-notchedOutline': { border: 'unset ' },
                 '& .MuiOutlinedInput-root': {
-                  fontSize: '2.5rem',
+                  fontSize: '1.5rem',
                   fontWeight: '700',
                 },
                 marginBottom: '10px',
@@ -177,7 +177,7 @@ const ModalTask = ({
             <Typography variant="body2" fontWeight="700">
               {/* Дата  */}
             </Typography>
-            <Divider sx={{ margin: '1.5rem 0' }} />
+            <Divider sx={{ margin: '0.5rem 0' }} />
             <Box
               sx={{
                 position: 'relative',

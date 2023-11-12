@@ -6,6 +6,10 @@
 	outline: none !important;
 }
 
+.ck.ck-editor__main>.ck-editor__editable p {
+	margin: 0;
+}
+
 .ck.ck-editor__main>.ck-editor__editable.ck-focused {
 	border: none !important;
 }
@@ -49,4 +53,8 @@
 	position: sticky !important;
 	top: 0 !important;
 	background: #121212 !important;
+}
+
+.ck.ck-toolbar {
+	background-color: black !important;
 }
