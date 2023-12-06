@@ -35,6 +35,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
 }>(({ theme, open }) => ({
   flexGrow: 1,
   // position: 'fixed',
+  height: '100vh',
   padding: theme.spacing(3),
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
@@ -137,8 +138,11 @@ export const MainLayout: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const deleteBoard = async () => {
+    const tempBoards = boards.items.filter((e) => e.id !== boardId)
+
     if (boardId) {
       dispatch(fetchDeleteOneBoard(boardId))
+      dispatch(boardActions.setActiveBoard(undefined))
       dispatch(boardActions.removeBoard({ boardId }))
       dispatch(sectionsActions.setSections([]))
       if (isFavorite) {
@@ -146,11 +150,11 @@ export const MainLayout: FC<PropsWithChildren> = ({ children }) => {
       }
     }
 
-    if (boards.items.length <= 0) {
+    if (tempBoards.length === 0) {
       dispatch(boardActions.setActiveBoard(undefined))
       navigate('/boards')
     } else {
-      navigate(`/boards/${boards.items[1].id}`)
+      navigate(`/boards/${tempBoards[0].id}`)
     }
   }
 

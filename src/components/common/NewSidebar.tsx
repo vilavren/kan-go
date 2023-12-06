@@ -45,7 +45,7 @@ export const NewSidebar = () => {
     }
     setActiveIndex(activeItem)
     dispatch(boardActions.setActiveBoard(boards.items[activeItem]))
-  }, [boards, boardsId, navigate])
+  }, [boards.items, boardsId, navigate])
 
   const onDragEnd = ({ source, destination }: DropResult) => {
     if (!destination) {
